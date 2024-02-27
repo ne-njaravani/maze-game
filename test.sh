@@ -75,9 +75,21 @@ fi
 # Test whether object file is executable
 
 
+#-------Maze TESTS-------
 
-echo -e "\n~~ Keypress Tests~~"
+# Test the maze width size
+# Test the maze height size
+# Test missing start point
+# Test missing end point
+# Test Test more than 1 start point
+# Test more than 1 end point
+# Test if all rows of the maze are the same width
+# Test if all columns of the maze are the same length
+# Test for the presence of invalid characters present in the maze
+
+
 #-------Keypress TESTS-------
+echo -e "\n~~ Keypress Tests~~"
 
 echo -n "Testing valid keypress - "
 # Test whether the cases of the valid letters were taken into account
