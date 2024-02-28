@@ -26,6 +26,8 @@ realloc every time or read file twice
 
 int load_maze(maze)
 {
+
+    // Free the allocated memory before the pointer goes
 }
 
 /*

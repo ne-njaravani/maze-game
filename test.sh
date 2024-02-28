@@ -42,7 +42,6 @@ fi
 
 echo -e "\n~~ File Handling Tests~~"
 
-# Test filename
 echo -n "Testing bad filename - "
 # Adapted from COMP1921 Lab 2: Testing
 
@@ -57,7 +56,7 @@ else
 fi
 
 echo -n "Testing whether file exists - "
-# Test whether file exists
+
 ((all_counter++))
 ./maze x > tmp
 if grep -q "File Not Found" tmp;
@@ -67,25 +66,40 @@ then
 else
     echo "FAIL"
 fi
-# Test whether file is empty
-
-
-# Test execution permissions
-
-# Test whether object file is executable
 
 
 #-------Maze TESTS-------
 
-# Test the maze width size
-# Test the maze height size
-# Test missing start point
-# Test missing end point
-# Test Test more than 1 start point
-# Test more than 1 end point
-# Test if all rows of the maze are the same width
-# Test if all columns of the maze are the same length
-# Test for the presence of invalid characters present in the maze
+echo -n "Testing long width - "((all_counter++))
+./maze x > tmp
+if grep -q "Error: Maze width is greater than 100" tmp;
+then
+    echo "PASS"
+    ((pass_counter++))
+else
+    echo "FAIL"
+fi
+
+echo -n "Testing short - "((all_counter++))
+./maze x > tmp
+if grep -q "Error: Maze width is less than 5" tmp;
+then
+    echo "PASS"
+    ((pass_counter++))
+else
+    echo "FAIL"
+fi
+ 
+echo -n "Testing height greater than upperbound - "((all_counter++))
+./maze x > tmp
+if grep -q "Error: Maze width is greater than 100" tmp;
+then
+    echo "PASS"
+    ((pass_counter++))
+else
+    echo "FAIL"
+fi
+
 
 
 #-------Keypress TESTS-------
@@ -93,13 +107,13 @@ echo -e "\n~~ Keypress Tests~~"
 
 echo -n "Testing valid keypress - "
 # Test whether the cases of the valid letters were taken into account
-# Use the read command to read a single character from user input (without echoing it)
+# Us# Test the maze width size too bige the read command to read a single character from user input (without echoing it)
 # adapted from a Stack Overflow: shell-script-respond-to-keypress
 # URL: https://stackoverflow.com/questions/24016046/shell-script-respond-to-keypress
 
 ((all_counter++))
-read -s -n 1 key
-if [ "$key" == "m" ] || [ "$key" == "M" ] || [ "$key" == "w" ] || [ "$key" == "W" ] || [ "$key" == "a" ] || [ "$key" == "A" ] || [ "$key" == "s" ] || [ "$key" == "S" ] || [ "$key" == "d" ] || [ "$key" == "D" ];
+./maze > tmp
+if grep -q "Here is the Map and your current location (X):" tmp;
 then
     echo "PASS"
     ((pass_counter++))
@@ -109,17 +123,12 @@ fi
 
 echo -n "Testing invalid keypress - "
 
-# Test if movement into wall happens
-
-
-# Test if player out of bounds
-
-echo -n "Testing invalid keypress - "
+echo -n "Testing map requested i.e. whether m/M was pressed - "
 #Test if map displayed
 
 ((all_counter++))
 ./maze > tmp
-if grep -q "Here is the Map:" tmp;
+if grep -q "Here is the Map and your current location (X):" tmp;
 then
     echo "PASS"
     ((pass_counter++))
