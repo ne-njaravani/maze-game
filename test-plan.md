@@ -32,5 +32,10 @@
 - Test if movement into wall happens
 -  Test if player out of bounds
 
+## Test invalid inputs
+
+
 # Test Valid Mazes
+
+
 # Test Invalid Mazes
