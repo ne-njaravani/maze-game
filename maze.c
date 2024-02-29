@@ -54,6 +54,14 @@ int update_move()
     // Check
     // return values of the player's current position
 }
+ss
+int display_maze(char move)
+{
+    // Check if the move is m/M
+    // Using the player's current position, check where they are in the maze
+    // Create a copy of the maze and replace the char in the maze with x
+    // Print the maze copy
+}
 
 int main(int argc, char const *argv[])
 {
