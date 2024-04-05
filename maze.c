@@ -1,77 +1,156 @@
+/**
+ * @file maze.c
+ * @author Ngakudzweishe E. (Eben) Njaravani
+ * @brief Code for the maze game for COMP1921 Assignment 2
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
-// Store information of the maze
-typedef struct
-{
-    int start_position[2];
-    int end_position[2];
-    char *maze;
-} MAZE;
+// defines for max and min permitted dimensions
+#define MAX_DIM 100
+#define MIN_DIM 5
+
+// defines for the required autograder exit codes
+#define EXIT_SUCCESS 0
+#define EXIT_ARG_ERROR 1
+#define EXIT_FILE_ERROR 2
+#define EXIT_MAZE_ERROR 3
 
 // Structure for the player's current position in the 2d array/ maze
-typedef struct
+typedef struct __Coord
 {
-    int current_pos_x;
-    int current_pos_y;
-} PLAYER;
+    int x;
+    int y;
+} coord;
 
-/*
-Module: to open the maze file and check whether it was opened properly.
-The method takes in the file name and stores the maze into an array
-realloc every time or read file twice
-*/
-int load_maze(maze)
+// Store maze info
+typedef struct __Maze
 {
-    /*Allocate memory to the array which will store the maze
-    Read the data from the file if it was successfully opened.
-    Free the allocated memory before the pointer goes
-    return true if the maze was successfully opened. False otherwise
-    */
+    char **map;
+    int height;
+    int width;
+    coord start;
+    coord end;
+} maze;
+
+/**
+ * @brief Initialise a maze object - allocate memory and set attributes
+ *
+ * @param this pointer to the maze to be initialised
+ * @param height height to allocate
+ * @param width width to allocate
+ * @return int 0 on success, 1 on fail
+ */
+int create_maze(maze *this, int height, int width)
+{
 }
 
-/*
-Function: Check if the maze is valid. Whether:
--The height and width are in a valid range
--There is a start point
--there is and end point
-*/
-int validate_maze(maze)
+/**
+ * @brief Free the memory allocated to the maze struct
+ *
+ * @param this the pointer to the struct to free
+ */
+void free_maze(maze *this)
 {
-    // Check whether the height and width are within an acceptable range
-    // Check for the presence of a starting point and an end point in the maze
-        // Ensure that there is only 1 of each.
 }
 
-/*
-Function to update the values of the players current position in the maze
-Parameters: player row position, player column position, the key that was pressed
-*/
-int update_move()
+/**
+ * @brief Validate and return the width of the mazefile
+ *
+ * @param file the file pointer to check
+ * @return int 0 for error, or a valid width (5-100)
+ */
+int get_width(FILE *file)
 {
-    // Check
-    // return values of the player's current position
 }
-ss
-int display_maze(char move)
+
+/**
+ * @brief Validate and return the height of the mazefile
+ *
+ * @param file the file pointer to check
+ * @return int 0 for error, or a valid height (5-100)
+ */
+int get_height(FILE *file)
 {
-    // Check if the move is m/M
-    // Using the player's current position, check where they are in the maze
-    // Create a copy of the maze and replace the char in the maze with x
-    // Print the maze copy
+}
+
+/**
+ * @brief read in a maze file into a struct
+ *
+ * @param this Maze struct to be used
+ * @param file Maze file pointer
+ * @return int 0 on success, 1 on fail
+ */
+int read_maze(maze *this, FILE *file)
+{
+}
+
+/**
+ * @brief Prints the maze out - code provided to ensure correct formatting
+ *
+ * @param this pointer to maze to print
+ * @param player the current player location
+ */
+void print_maze(maze *this, coord *player)
+{
+    // make sure we have a leading newline..
+    printf("\n");
+    for (int i = 0; i < this->height; i++)
+    {
+        for (int j = 0; j < this->width; j++)
+        {
+            // decide whether player is on this spot or not
+            if (player->x == j && player->y == i)
+            {
+                printf("X");
+            }
+            else
+            {
+                printf("%c", this->map[i][j]);
+            }
+        }
+        // end each row with a newline.
+        printf("\n");
+    }
+}
+
+
+/**
+ * @brief Validates and makes a movement in a given direction
+ *
+ * @param this Maze struct
+ * @param player The player's current position
+ * @param direction The desired direction to move in
+ */
+void move(maze *this, coord *player, char direction)
+{}
+
+
+/**
+ * @brief Check whether the player has won and return a pseudo-boolean
+ *
+ * @param this current maze
+ * @param player player position
+ * @return int 0 for false, 1 for true
+ */
+int has_won(maze *this, coord *player)
+{
 }
 
 int main(int argc, char const *argv[])
 {
     // Setup
         // Check if theer's 2 args.
-            // print usage error 
+            // print usage error
+        // Setup useful variables
+        
 
     // display controls to user
 
-    // Play
+    // Play (maze game loop)
     // while the player has not made a bad move or has not yet won
         // player makes a move
             // Check whether the move that was valid
