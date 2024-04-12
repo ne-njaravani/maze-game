@@ -1,7 +1,7 @@
 /**
  * @file maze.c
  * @author Ngakudzweishe E. (Eben) Njaravani
- * @brief Code for the maze game for COMP1921 Assignment 2
+ * @brief Code for the maze game
  */
 
 #include <stdio.h>
@@ -36,6 +36,17 @@ typedef struct __Maze
     coord end;
 } maze;
 
+// Adapted from Cbootcamp: Week 4 Session 1
+FILE *open_file(char filename[])
+{
+    FILE *file = fopen(filename, "r");
+    if (file == NULL)
+    {
+        printf("Error: invalid file\n");
+        exit(1); // Exits program with return status 1.
+    }
+}
+
 /**
  * @brief Initialise a maze object - allocate memory and set attributes
  *
@@ -46,6 +57,25 @@ typedef struct __Maze
  */
 int create_maze(maze *this, int height, int width)
 {
+    // allocate memory for height
+    this->map = malloc(height * sizeof(char *));
+    if (this->map == NULL)
+    {
+        return 1;
+    }
+    // allcocate memory for the width on each row
+    for (int i = 0; i < height; i++)
+    {
+        this->map[i] = malloc(width * sizeof(char));
+        if (this->map[i] == NULL)
+        {
+            return 1;
+        }
+    }
+    // set the height and width
+    this->height = height;
+    this->width = width;
+    return 0;
 }
 
 /**
@@ -55,6 +85,11 @@ int create_maze(maze *this, int height, int width)
  */
 void free_maze(maze *this)
 {
+    // free each row of the map
+    for (int i = 0; i < this->height; i++)
+    {
+        free(this->map[i]);
+    }
 }
 
 /**
@@ -65,6 +100,25 @@ void free_maze(maze *this)
  */
 int get_width(FILE *file)
 {
+    int file_width;
+    char line[MAX_DIM];
+    // read the width of the maze from the file.
+    file_width = fgets(line, MAX_DIM, file);
+    // Check if the initial line that was read was not null and whether it is a valid width
+    if (file_width == NULL || file_width < MIN_DIM || file_width > MAX_DIM)
+    {
+        return 0;
+    }
+    // Validate: whether each line is the same length as the first line
+    while (fgets(line, MAX_DIM, file) != NULL)
+    {
+        if (strlen(line) != file_width)
+        {
+            return 0;
+        }
+    }
+    rewind(file);
+    return file_width;
 }
 
 /**
@@ -75,6 +129,42 @@ int get_width(FILE *file)
  */
 int get_height(FILE *file)
 {
+    // check the height of each column in the mazefile
+    int file_height;
+    int line_width[get_width(file)];
+    int file_pointer;
+    char char_in_line;
+
+    
+
+    //if the width of the file was not valid then there's no need to check the height
+    if (line_width == 0)
+    {
+        return 0;
+    }
+    else
+    {
+        // read the characters in a line
+        for (int i = 0; i < line_width; i++)
+        {
+            // Move the file pointer to the ith character in the line
+            file_pointer = fseek(file, i, SEEK_SET);
+            {
+                if (fseek != 0)
+                {
+                    return 0;
+                }
+            }
+            
+        }
+        
+    }
+    
+    
+    
+
+    rewind(file);
+    return file_height;
 }
 
 /**
@@ -117,7 +207,6 @@ void print_maze(maze *this, coord *player)
     }
 }
 
-
 /**
  * @brief Validates and makes a movement in a given direction
  *
@@ -126,8 +215,8 @@ void print_maze(maze *this, coord *player)
  * @param direction The desired direction to move in
  */
 void move(maze *this, coord *player, char direction)
-{}
-
+{
+}
 
 /**
  * @brief Check whether the player has won and return a pseudo-boolean
@@ -143,19 +232,32 @@ int has_won(maze *this, coord *player)
 int main(int argc, char const *argv[])
 {
     // Setup
-        // Check if theer's 2 args.
-            // print usage error
-        // Setup useful variables
-        
+    // Check args
+    // Check if there's 2 args.
+    // print usage error
+    // Setup useful variables
+    coord *player;
+    maze *this_maze = malloc(sizeof(maze));
+    FILE *file;
+    int width, height, win;
 
     // display controls to user
 
+    // Open and validate mazefile
+
+    // read in maze file to struct
+
     // Play (maze game loop)
     // while the player has not made a bad move or has not yet won
-        // player makes a move
-            // Check whether the move that was valid
-                // if it wasn't then display error message telling the player not to do that
-        // Check if the player reached the exit point
-            // Print winning message if they did & exit the code
-    return 0;
+    // player makes a move
+    // Check whether the move that was valid
+    // if it was
+    // then update the player's position
+    // if it wasn't
+    // then display error message telling the player not to do that
+    // Check if the player reached the exit point
+    // Print winning message if they did & exit the code
+
+    // Win
+    // return, free, exit
 }

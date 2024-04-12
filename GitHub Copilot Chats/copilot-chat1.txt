@@ -1,0 +1,9 @@
+Topic: Parsing file parameter to a function
+
+ne-njaravani: For this function header "int get_width(FILE *file)" does FILE *file mean the parameter is the filename or is the whole file object parsed to the function. Do not provide code for the function.
+
+GitHub Copilot: The `FILE *file` parameter in the function `int get_width(FILE *file)` is a pointer to a `FILE` object, not a filename. This `FILE` object represents a stream that can be used to read from or write to a file. The `FILE` object is typically obtained by calling the `fopen` function, which opens a file and returns a `FILE` pointer. This pointer is then passed to other functions that read from or write to the file.
+
+ne-njaravani: so will the file object be opened within the function or should it have already been opened to be able to parse it as a parameter?
+
+GitHub Copilot: The `FILE *file` parameter should already be an opened file before it is passed to the `get_width` function. The function `get_width` is not responsible for opening the file, it only uses the already opened file to perform its operations. The file should be opened elsewhere in your code, typically before calling `get_width`.
