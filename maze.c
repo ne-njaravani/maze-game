@@ -8,33 +8,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "MazeStructs.h"
+#include "MazeConstants.h"
 
-// defines for max and min permitted dimensions
-#define MAX_DIM 100
-#define MIN_DIM 5
-
-// defines for the required autograder exit codes
-#define EXIT_SUCCESS 0
-#define EXIT_ARG_ERROR 1
-#define EXIT_FILE_ERROR 2
-#define EXIT_MAZE_ERROR 3
-
-// Structure for the player's current position in the 2d array/ maze
-typedef struct __Coord
-{
-    int x;
-    int y;
-} coord;
-
-// Store maze info
-typedef struct __Maze
-{
-    char **map;
-    int height;
-    int width;
-    coord start;
-    coord end;
-} maze;
 
 // Adapted from Cbootcamp: Week 4 Session 1
 FILE *open_file(char filename[])
@@ -130,12 +106,11 @@ int get_width(FILE *file)
 int get_height(FILE *file)
 {
     // check the height of each column in the mazefile
-    int file_height;
-    int line_width[get_width(file)];
+    int line_width = get_width(file);
     int file_pointer;
     char char_in_line;
-
-    
+    int file_height; 
+     
 
     //if the width of the file was not valid then there's no need to check the height
     if (line_width == 0)
@@ -144,25 +119,42 @@ int get_height(FILE *file)
     }
     else
     {
+        int heights_of_col[line_width]; // array to store the height of each column
         // read the characters in a line
         for (int i = 0; i < line_width; i++)
         {
             // Move the file pointer to the ith character in the line
-            file_pointer = fseek(file, i, SEEK_SET);
+            file_pointer = fseek(file, i, SEEK_CUR);
             {
                 if (fseek != 0)
                 {
                     return 0;
                 }
-            }
-            
-        }
-        
-    }
-    
-    
-    
+                else
+                {
+                    char_in_line = fgetc(file);
 
+                    if (char_in_line == EOF && feof(file) == 0 && ferror(file) != 0)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        heights_of_col[i]++;
+                    }
+                }
+            }            
+        }
+        // Check if the height of each column is the same
+        for (int i = 1; i < line_width; i++)
+        {
+            if (heights_of_col[i] != heights_of_col[0])
+            {
+                return 0;
+            }
+        }
+        file_height = heights_of_col[0];       
+    }
     rewind(file);
     return file_height;
 }
@@ -176,6 +168,7 @@ int get_height(FILE *file)
  */
 int read_maze(maze *this, FILE *file)
 {
+    
 }
 
 /**
@@ -232,9 +225,9 @@ int has_won(maze *this, coord *player)
 int main(int argc, char const *argv[])
 {
     // Setup
-    // Check args
-    // Check if there's 2 args.
-    // print usage error
+        // Check args
+            // Check if there's 2 args.
+                // print usage error
     // Setup useful variables
     coord *player;
     maze *this_maze = malloc(sizeof(maze));
@@ -248,16 +241,17 @@ int main(int argc, char const *argv[])
     // read in maze file to struct
 
     // Play (maze game loop)
-    // while the player has not made a bad move or has not yet won
-    // player makes a move
-    // Check whether the move that was valid
-    // if it was
-    // then update the player's position
-    // if it wasn't
-    // then display error message telling the player not to do that
-    // Check if the player reached the exit point
-    // Print winning message if they did & exit the code
+        // while the player has not made a bad move or has not yet won
+            // player makes a move
+                // Check whether the move that was valid
+                    // if it was
+                        // then update the player's position
+                    // if it wasn't
+                        // then display error message telling the player not to do that
+                // Check if the player reached the exit point
+                    // Print winning message if they did & exit the code
 
     // Win
+
     // return, free, exit
 }
