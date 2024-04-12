@@ -168,7 +168,78 @@ int get_height(FILE *file)
  */
 int read_maze(maze *this, FILE *file)
 {
+    int height, width, create_success, num_start, num_end;
+    num_start, num_end = 0;
+
+    height = get_height(file);
+
+    if (height == 0)
+    {
+        return 1;
+    }    
+
+    width = get_width(file);
+
+    if (width == 0)
+    {
+        return 1;
+    }
     
+    create_success = create_maze(this, height, width);
+
+    if (create_success == 1)
+    {
+        return 1;
+        free_maze(this);
+    }
+
+    // read the maze into the struct
+    for (int i = 0; i < height; i++)
+    {
+        fgets(this->map[i], width, file);
+    }
+    // Validate that each character in the array is either: ' ', 'S', 'E', '#' or '\n'
+        // if the character is 'S' then increment num_start
+        // if the character is 'E' then increment num_end
+        // if the character is not any of the above then return 1
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; i < width; i++)
+        {
+            if (this->map[i][j] == 'S')
+            {
+                num_start++;
+            }
+            else if (this->map[i][j] == 'E')
+            {
+                num_end++;
+            }
+            else if (this->map[i][j] != ' ' && this->map[i][j] != '#' && this->map[i][j] != '\n')
+            {
+                return 1;
+            }
+        } 
+    }
+    // Validate that there is only one start and one end
+    if (num_start != 1 && num_end != 1){
+        return 1;
+    }
+    // Validate that the start and end are not on the same spot 
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; i < width; i++)
+        {
+            if (this->map[i][j] == 'S' && this->map[i][j] == 'E')
+            {
+                return 1;
+            }
+        } 
+    }
+
+
+    return 0;
+
+
 }
 
 /**
@@ -209,6 +280,11 @@ void print_maze(maze *this, coord *player)
  */
 void move(maze *this, coord *player, char direction)
 {
+    // Check if the move is valid
+        // if it is then 
+            // update the player's position
+        // if it isn't then
+            // print an error message so that the player knows not to do that
 }
 
 /**
