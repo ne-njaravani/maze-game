@@ -209,10 +209,14 @@ int read_maze(maze *this, FILE *file)
             if (this->map[i][j] == 'S')
             {
                 num_start++;
+                this->start.x = i;
+                this->start.y = j;
             }
             else if (this->map[i][j] == 'E')
             {
                 num_end++;
+                this->end.x = i;
+                this->end.y = j;
             }
             else if (this->map[i][j] != ' ' && this->map[i][j] != '#' && this->map[i][j] != '\n')
             {
@@ -224,22 +228,26 @@ int read_maze(maze *this, FILE *file)
     if (num_start != 1 && num_end != 1){
         return 1;
     }
-    // Validate that the start and end are not on the same spot 
-    for (int i = 0; i < height; i++)
+
+    // Validate that the start and end are not the same
+    if (this->start.x == this->end.x && this->start.y == this->end.y)
     {
-        for (int j = 0; i < width; i++)
-        {
-            if (this->map[i][j] == 'S' && this->map[i][j] == 'E')
-            {
-                return 1;
-            }
-        } 
+        return 1;
     }
 
-
     return 0;
+}
 
-
+/**
+ * @brief Set the player's position to the start of the maze
+ *
+ * @param player the player's position
+ * @param this the maze to use
+ */
+void initialise_player(coord *player, maze *this)
+{
+    player->x = this->start.x;
+    player->y = this->start.y;
 }
 
 /**
@@ -277,14 +285,95 @@ void print_maze(maze *this, coord *player)
  * @param this Maze struct
  * @param player The player's current position
  * @param direction The desired direction to move in
+ * @return int 0 for invalid move, 1 for valid move
  */
-void move(maze *this, coord *player, char direction)
+int move(maze *this, coord *player, char direction)
 {
-    // Check if the move is valid
-        // if it is then 
-            // update the player's position
-        // if it isn't then
-            // print an error message so that the player knows not to do that
+    int new_x, new_y, valid_move;
+
+    // up movement
+    if (direction == 'w' || direction == 'W')
+    {
+        new_x = player->x;
+        new_y = player->y + 1;
+
+        // Check if the movement is in the boundaries of the maze
+        if (this->map[new_x][new_y] == '\n' || this->map[new_x][new_y] == '#' || new_x < 0 || new_x >= this->width ||  new_y < 0 || new_y >= this->height)
+        {
+            printf("W is an invalid move\n");
+            return 0;
+        }
+        else
+        {
+            printf("You have moved up.\n");
+            player->x = new_x;
+            player->y = new_y;
+        }
+    }
+    
+    //left movement
+    if (direction == 'a' || direction == 'A')
+    {
+        new_x = player->x - 1;
+        new_y = player->y;
+
+        // Check if the movement is in the boundaries of the maze
+        if (this->map[new_x][new_y] == '\n' || this->map[new_x][new_y] == '#' || new_x < 0 || new_x >= this->width ||  new_y < 0 || new_y >= this->height)
+        {
+            printf("A is an invalid move\n");
+            return 0;
+        }
+        else
+        {
+            printf("You have moved left.\n");
+            player->x = new_x;
+            player->y = new_y;
+        }
+
+    }
+
+    //down movement
+    if (direction == 's' || direction == 'S')
+    {
+        new_x = player->x;
+        new_y = player->y - 1;
+
+        // Check if the movement is in the boundaries of the maze
+        if (this->map[new_x][new_y] == '\n' || this->map[new_x][new_y] == '#' || new_x < 0 || new_x >= this->width ||  new_y < 0 || new_y >= this->height)
+        {
+            printf("S is an invalid move\n");
+            return 0;
+        }
+        else
+        {
+            printf("You have moved down.\n");
+            player->x = new_x;
+            player->y = new_y;
+        }
+    }
+
+    //right movement
+    if (direction == 'd' || direction == 'D')
+    {
+        new_x = player->x + 1;
+        new_y = player->y;
+
+        // Check if the movement is in the boundaries of the maze
+        if (this->map[new_x][new_y] == '\n' || this->map[new_x][new_y] == '#' || new_x < 0 || new_x >= this->width ||  new_y < 0 || new_y >= this->height)
+        {
+            printf("D is an invalid move\n");
+            return 0;
+        }
+        else
+        {
+            printf("You have moved right.\n");
+            player->x = new_x;
+            player->y = new_y;
+        }
+    }
+
+
+
 }
 
 /**
