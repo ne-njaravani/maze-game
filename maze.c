@@ -21,8 +21,17 @@ int main(int argc, char const *argv[])
     coord *player;
     maze *this_maze = malloc(sizeof(maze));
     FILE *file;
+    int valid_read, valid_create, valid_move;
     int win = 0;
     const char* file_name;
+    char player_move;
+    const char* controls = "\n Use the following controls to move the player:\n"
+                            "W - Move up\n"
+                            "A - Move left\n"
+                            "S - Move down\n"
+                            "D - Move right\n"
+                            "M - Display the map\n"
+                            "Make your move: ";
 
         // Check args
         if (argc != 2)
@@ -35,12 +44,7 @@ int main(int argc, char const *argv[])
             // Open and validate mazefile
             // Check if the file is a valid file
             file_name = get_filename_from_path(argv[1]);
-            FILE *file = open_file(file_name);
-
-            if (file == NULL)
-            {
-                return CODE_FILE_ERROR;
-            }
+            file = open_file(file_name);
         }
 
         printf("Welcome to the Maze Game\n");
@@ -51,36 +55,47 @@ int main(int argc, char const *argv[])
 
         if (this_maze->width == 0 || this_maze->height == 0)
         {
+            free(this_maze);
+            return CODE_MAZE_ERROR;
+        }
+
+        valid_create = create_maze(this_maze, this_maze->height, this_maze->width);
+
+        if (valid_create == 1)
+        {
+            free(this_maze);
+            return CODE_MAZE_ERROR;
+        }
+        valid_read = read_maze(this_maze, file);
+
+        if (valid_read == 1)
+        {
+            free(this_maze);
             return CODE_MAZE_ERROR;
         }
         
         
 
-    
-
-
-    // read in maze file to struct
-
     // Play (maze game loop)
     while (win == 0)
     {
-        
+        printf("%s", controls);
+        scanf("%c", &player_move);
+        player_move = toupper(player_move);
+        valid_move = move(this_maze, player, player_move);
+        // Keep asking for a move until a valid move is made
+        while (valid_move == 0)
+        {
+            printf("Invalid move. Try again.\n");
+            printf("%s", controls);
+            scanf("%c", &player_move);
+            player_move = toupper(player_move);
+            valid_move = move(this_maze, player, player_move);
+        }
+        win = has_won(this_maze, player);
     }
-    
-        // while the player has not made a bad move or has not yet won
-            // player makes a move
-                // Check whether the move that was valid
-                    // if it was
-                        // then update the player's position
-                    // if it wasn't
-                        // then display error message telling the player not to do that
-                // Check if the player reached the exit point
-                    // Print winning message if they did & exit the code
 
-    // Win
-
-
-
+    printf("A-MAZING!!! You have won the game!\n");
     return CODE_SUCCESS;
     // return, free, exit
 }

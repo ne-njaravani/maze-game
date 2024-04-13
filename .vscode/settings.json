@@ -3,6 +3,7 @@
         "stdlib.h": "c",
         "cstring": "cpp",
         "ctype.h": "c",
-        "mazestructs.h": "c"
+        "mazestructs.h": "c",
+        "filemanipulationfunctions.h": "c"
     }
 }

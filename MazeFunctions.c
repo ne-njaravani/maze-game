@@ -14,15 +14,7 @@
 #include "MazeFunctions.h"
 
 
-FILE *open_file(char filename[])
-{
-    FILE *file = fopen(filename, "r");
-    if (file == NULL)
-    {
-        printf("Error: invalid file\n");
-        exit(CODE_FILE_ERROR); // Exits program with return status 1.
-    }
-}
+
 
 
 /**
@@ -50,9 +42,6 @@ int create_maze(maze *this, int height, int width)
             return 1;
         }
     }
-    // set the height and width
-    this->height = height;
-    this->width = width;
     return 0;
 }
 
@@ -80,6 +69,7 @@ int get_width(FILE *file)
 {
     int file_width;
     char line[MAX_DIM];
+    int line_length;
 
     // read the width of the maze from the file.
     // Check if the initial line that was read is not NULL
@@ -98,7 +88,8 @@ int get_width(FILE *file)
     // Validate: whether each line is the same length as the first line
     while (fgets(line, MAX_DIM, file) != NULL)
     {
-        if (strlen(line) != file_width)
+        line_length = strlen(line);
+        if (line_length != file_width)
         {
             return 0;
         }
@@ -135,7 +126,7 @@ int get_height(FILE *file)
             // Move the file pointer to the ith character in the line
             file_pointer = fseek(file, i, SEEK_CUR);
             {
-                if (fseek == 0)
+                if (file_pointer == 0)
                 {
                     char_in_line = fgetc(file);
 
@@ -177,43 +168,21 @@ int get_height(FILE *file)
  */
 int read_maze(maze *this, FILE *file)
 {
-    int height, width, create_success, num_start, num_end;
-    num_start, num_end = 0;
-
-    height = get_height(file);
-
-    if (height == 0)
-    {
-        return 1;
-    }
-
-    width = get_width(file);
-
-    if (width == 0)
-    {
-        return 1;
-    }
-
-    create_success = create_maze(this, height, width);
-
-    if (create_success == 1)
-    {
-        return 1;
-        free_maze(this);
-    }
+    int num_start, num_end;
+    num_start = num_end = 0;
 
     // read the maze into the struct
-    for (int i = 0; i < height; i++)
+    for (int i = 0; i < this->height; i++)
     {
-        fgets(this->map[i], width, file);
+        fgets(this->map[i], this->width, file);
     }
     // Validate that each character in the array is either: ' ', 'S', 'E', '#' or '\n'
     // if the character is 'S' then increment num_start
     // if the character is 'E' then increment num_end
     // if the character is not any of the above then return 1
-    for (int i = 0; i < height; i++)
+    for (int i = 0; i < this->height; i++)
     {
-        for (int j = 0; i < width; i++)
+        for (int j = 0; i < this->width; i++)
         {
             if (this->map[i][j] == 'S')
             {
@@ -245,6 +214,7 @@ int read_maze(maze *this, FILE *file)
         return 1;
     }
 
+    fclose(file);
     return 0;
 }
 
@@ -379,6 +349,13 @@ int move(maze *this, coord *player, char direction)
             player->y = new_y;
         }
     }
+
+    else if (direction == 'm' || direction == 'M')
+    {
+        printf("Loading map...\n");
+        print_maze(this, player);
+    }
+
     else
     {
         printf("Invalid move\n");

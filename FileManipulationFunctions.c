@@ -1,14 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "MazeConstants.h"
 
-static FILE *open_file(char filename[])
+FILE *open_file(const char filename[])
 {
     FILE *file = fopen(filename, "r");
     if (file == NULL)
     {
         printf("Error: invalid file\n");
-        exit(1); // Exits program with return status 1.
+        exit(CODE_FILE_ERROR); // Exits program with return status 1.
     }
 }
 
