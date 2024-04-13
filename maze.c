@@ -14,7 +14,15 @@
 #include "MazeFunctions.h"
 
 
-
+FILE *open_file(char filename[])
+{
+    FILE *file = fopen(filename, "r");
+    if (file == NULL)
+    {
+        printf("Error: invalid file\n");
+        exit(CODE_FILE_ERROR); // Exits program with return status 1.
+    }
+}
 
 int main(int argc, char const *argv[])
 {
@@ -25,6 +33,15 @@ int main(int argc, char const *argv[])
         {
             printf("./maze <mazefile path>\n");
             return CODE_ARG_ERROR;
+        }
+        else
+        {
+            // Check if the file is a valid file
+            FILE *file = open_file(argv[1]);
+            if (file == NULL)
+            {
+                return CODE_FILE_ERROR;
+            }
         }
         
             // Setup useful variables

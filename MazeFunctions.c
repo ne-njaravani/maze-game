@@ -1,7 +1,7 @@
 /**
- * @file maze.c
+ * @file MazeFunctions.c
  * @author Ngakudzweishe E. (Eben) Njaravani
- * @brief Code for the maze game
+ * @brief Functions for the maze game
  */
 
 #include <stdio.h>
@@ -301,9 +301,8 @@ int move(maze *this, coord *player, char direction)
             player->y = new_y;
         }
     }
-
     // left movement
-    if (direction == 'a' || direction == 'A')
+    else if (direction == 'a' || direction == 'A')
     {
         new_x = player->x - 1;
         new_y = player->y;
@@ -323,7 +322,7 @@ int move(maze *this, coord *player, char direction)
     }
 
     // down movement
-    if (direction == 's' || direction == 'S')
+    else if (direction == 's' || direction == 'S')
     {
         new_x = player->x;
         new_y = player->y - 1;
@@ -343,7 +342,7 @@ int move(maze *this, coord *player, char direction)
     }
 
     // right movement
-    if (direction == 'd' || direction == 'D')
+    else if (direction == 'd' || direction == 'D')
     {
         new_x = player->x + 1;
         new_y = player->y;
@@ -361,6 +360,13 @@ int move(maze *this, coord *player, char direction)
             player->y = new_y;
         }
     }
+    else
+    {
+        printf("Invalid move\n");
+        return 0;
+    }
+
+    return 1;
 }
 
 /**

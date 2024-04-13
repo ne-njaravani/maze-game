@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-FILE *open_file(char filename[])
+static FILE *open_file(char filename[])
 {
     FILE *file = fopen(filename, "r");
     if (file == NULL)
