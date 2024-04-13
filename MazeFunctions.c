@@ -65,32 +65,21 @@ void free_maze(maze *this)
  * @param file the file pointer to check
  * @return int 0 for error, or a valid width (5-100)
  */
-int get_width(FILE *file)
-{
-    int file_width;
+int get_width(FILE *file) {
     char line[MAX_DIM];
-    int line_length;
-
-    // read the width of the maze from the file.
-    // Check if the initial line that was read is not NULL
-    if (fgets(line, MAX_DIM, file) == NULL)
-    {
+    if (fgets(line, MAX_DIM, file) == NULL) {
         return 0;
     }
-    file_width = strlen(line);
-
-    // Check if the initial line that was read is a valid width
-    if (file_width < MIN_DIM || file_width > MAX_DIM)
-    {
+    // Remove newline character from the line length calculation
+    int file_width = strcspn(line, "\n");
+    if (file_width < MIN_DIM || file_width > MAX_DIM) {
         return 0;
     }
-    
     // Validate: whether each line is the same length as the first line
-    while (fgets(line, MAX_DIM, file) != NULL)
-    {
-        line_length = strlen(line);
-        if (line_length != file_width)
-        {
+    int line_length;
+    while (fgets(line, MAX_DIM, file) != NULL) {
+        line_length = strcspn(line, "\n");
+        if (line_length != file_width) {
             return 0;
         }
     }
@@ -98,62 +87,21 @@ int get_width(FILE *file)
     return file_width;
 }
 
+
 /**
  * @brief Validate and return the height of the mazefile
  *
  * @param file the file pointer to check
  * @return int 0 for error, or a valid height (5-100)
  */
-int get_height(FILE *file)
-{
-    // check the height of each column in the mazefile
-    int line_width = get_width(file);
-    int file_pointer;
-    char char_in_line;
-    int file_height;
-
-    // if the width of the file was not valid then there's no need to check the height
-    if (line_width == 0)
-    {
-        return 0;
+int get_height(FILE *file) {
+    int file_height = 0;
+    char line[MAX_DIM];
+    while (fgets(line, MAX_DIM, file) != NULL) {
+        file_height++;
     }
-    else
-    {
-        int heights_of_col[line_width]; // array to store the height of each column
-        // read the characters in a line
-        for (int i = 0; i < line_width; i++)
-        {
-            // Move the file pointer to the ith character in the line
-            file_pointer = fseek(file, i, SEEK_CUR);
-            {
-                if (file_pointer == 0)
-                {
-                    char_in_line = fgetc(file);
-
-                    if (char_in_line == EOF && feof(file) == 0 && ferror(file) != 0)
-                    {
-                        return 0;
-                    }
-                    else
-                    {
-                        heights_of_col[i]++;
-                    }
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-        }
-        // Check if the height of each column is the same
-        for (int i = 1; i < line_width; i++)
-        {
-            if (heights_of_col[i] != heights_of_col[0])
-            {
-                return 0;
-            }
-        }
-        file_height = heights_of_col[0];
+    if (file_height < MIN_DIM || file_height > MAX_DIM) {
+        return 0;
     }
     rewind(file);
     return file_height;
@@ -168,20 +116,15 @@ int get_height(FILE *file)
  */
 int read_maze(maze *this, FILE *file)
 {
-    int num_start, num_end;
-    num_start = num_end = 0;
+    int num_start = 0, num_end = 0;
 
     // read the maze into the struct
     for (int i = 0; i < this->height; i++)
     {
-        fgets(this->map[i], this->width, file);
-    }
-    // Validate that each character in the array is either: ' ', 'S', 'E', '#' or '\n'
-    // if the character is 'S' then increment num_start
-    // if the character is 'E' then increment num_end
-    // if the character is not any of the above then return 1
-    for (int i = 0; i < this->height; i++)
-    {
+        if (fgets(this->map[i], this->width, file) == NULL)
+        {
+            return 1;
+        }
         for (int j = 0; i < this->width; i++)
         {
             if (this->map[i][j] == 'S')
@@ -202,6 +145,10 @@ int read_maze(maze *this, FILE *file)
             }
         }
     }
+    // Validate that each character in the array is either: ' ', 'S', 'E', '#' or '\n'
+    // if the character is 'S' then increment num_start
+    // if the character is 'E' then increment num_end
+    // if the character is not any of the above then return 1
     // Validate that there is only one start and one end
     if (num_start != 1 && num_end != 1)
     {

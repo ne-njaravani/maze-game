@@ -13,8 +13,6 @@
 #include "FileManipulationFunctions.h"
 #include "MazeFunctions.h"
 
-
-
 int main(int argc, char const *argv[])
 {
     // Setup
@@ -23,71 +21,71 @@ int main(int argc, char const *argv[])
     FILE *file;
     int valid_read, valid_create, valid_move;
     int win = 0;
-    const char* file_name;
     char player_move;
-    const char* controls = "\n Use the following controls to move the player:\n"
-                            "W - Move up\n"
-                            "A - Move left\n"
-                            "S - Move down\n"
-                            "D - Move right\n"
-                            "M - Display the map\n"
-                            "Make your move: ";
+    const char *controls = "\n Use the following controls to move the player:\n"
+                           "W - Move up\n"
+                           "A - Move left\n"
+                           "S - Move down\n"
+                           "D - Move right\n"
+                           "M - Display the map\n"
+                           "Make your move: ";
 
-        // Check args
-        if (argc != 2)
+    // Check args
+    if (argc != 2)
+    {
+        printf("./maze <mazefile path>\n");
+        return CODE_ARG_ERROR;
+    }
+    else
+    {
+        // Open and validate mazefile
+        // Check if the file is a valid file
+        file = open_file(argv[1]);
+        if (file == NULL)
         {
-            printf("./maze <mazefile path>\n");
-            return CODE_ARG_ERROR;
+            return CODE_FILE_ERROR;
         }
-        else
-        {
-            // Open and validate mazefile
-            // Check if the file is a valid file
-            file_name = get_filename_from_path(argv[1]);
-            file = open_file(file_name);
-        }
+    }
 
-        printf("Welcome to the Maze Game\n");
-    
-        // Read in maze file to struct
-        this_maze->width = get_width(file);
-        this_maze->height = get_height(file);
+    printf("Welcome to the Maze Game\n");
 
-        if (this_maze->width == 0 || this_maze->height == 0)
-        {
-            free(this_maze);
-            return CODE_MAZE_ERROR;
-        }
+    // Read in maze file to struct
+    this_maze->width = get_width(file);
+    this_maze->height = get_height(file);
 
-        valid_create = create_maze(this_maze, this_maze->height, this_maze->width);
+    if (this_maze->width == 0 || this_maze->height == 0)
+    {
+        return CODE_MAZE_ERROR;
+    }
 
-        if (valid_create == 1)
-        {
-            free(this_maze);
-            return CODE_MAZE_ERROR;
-        }
-        valid_read = read_maze(this_maze, file);
+    valid_create = create_maze(this_maze, this_maze->height, this_maze->width);
 
-        if (valid_read == 1)
-        {
-            free(this_maze);
-            return CODE_MAZE_ERROR;
-        }
+    if (valid_create == 1)
+    {
+        return CODE_MAZE_ERROR;
+    }
+    valid_read = read_maze(this_maze, file);
 
-        initialise_player(player, this_maze);
+    if (valid_read == 1)
+    {
+        return CODE_MAZE_ERROR;
+    }
+    print_maze(this_maze, player);
+
+    initialise_player(player, this_maze);
 
     // Play (maze game loop)
     while (win == 0)
     {
         printf("%s", controls);
-        scanf("%c", &player_move);
+        scanf(" %c", &player_move);
         player_move = toupper(player_move);
         valid_move = move(this_maze, player, player_move);
         // Keep asking for a move until a valid move is made
         while (valid_move == 0)
         {
             printf("Invalid move. Try again.\n");
-            printf("%s", controls);
+            printf(" %s", controls);
             scanf("%c", &player_move);
             player_move = toupper(player_move);
             valid_move = move(this_maze, player, player_move);
@@ -96,6 +94,7 @@ int main(int argc, char const *argv[])
     }
 
     printf("A-MAZING!!! You have won the game!\n");
+    free_maze(this_maze);
     return CODE_SUCCESS;
     // return, free, exit
 }

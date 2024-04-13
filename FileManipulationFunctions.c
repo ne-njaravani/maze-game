@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "MazeConstants.h"
+#include "FileManipulationFunctions.h"
 
 FILE *open_file(const char filename[])
 {
@@ -27,6 +28,7 @@ const char* get_filename_from_path(const char* path)
     }
     else
     {
+        printf("File name: %s\n", path);
         return path;
     }
 }
