@@ -14,6 +14,17 @@
 #include "MazeFunctions.h"
 
 
+FILE *open_file(char filename[])
+{
+    FILE *file = fopen(filename, "r");
+    if (file == NULL)
+    {
+        printf("Error: invalid file\n");
+        exit(CODE_FILE_ERROR); // Exits program with return status 1.
+    }
+}
+
+
 /**
  * @brief Initialise a maze object - allocate memory and set attributes
  *
@@ -69,13 +80,21 @@ int get_width(FILE *file)
 {
     int file_width;
     char line[MAX_DIM];
+
     // read the width of the maze from the file.
-    file_width = fgets(line, MAX_DIM, file);
-    // Check if the initial line that was read was not null and whether it is a valid width
-    if (file_width == NULL || file_width < MIN_DIM || file_width > MAX_DIM)
+    // Check if the initial line that was read is not NULL
+    if (fgets(line, MAX_DIM, file) == NULL)
     {
         return 0;
     }
+    file_width = strlen(line);
+
+    // Check if the initial line that was read is a valid width
+    if (file_width < MIN_DIM || file_width > MAX_DIM)
+    {
+        return 0;
+    }
+    
     // Validate: whether each line is the same length as the first line
     while (fgets(line, MAX_DIM, file) != NULL)
     {
@@ -116,11 +135,7 @@ int get_height(FILE *file)
             // Move the file pointer to the ith character in the line
             file_pointer = fseek(file, i, SEEK_CUR);
             {
-                if (fseek != 0)
-                {
-                    return 0;
-                }
-                else
+                if (fseek == 0)
                 {
                     char_in_line = fgetc(file);
 
@@ -132,6 +147,10 @@ int get_height(FILE *file)
                     {
                         heights_of_col[i]++;
                     }
+                }
+                else
+                {
+                    return 0;
                 }
             }
         }
@@ -280,7 +299,7 @@ void print_maze(maze *this, coord *player)
  */
 int move(maze *this, coord *player, char direction)
 {
-    int new_x, new_y, valid_move;
+    int new_x, new_y;
 
     // up movement
     if (direction == 'w' || direction == 'W')

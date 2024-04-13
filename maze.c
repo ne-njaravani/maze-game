@@ -14,19 +14,15 @@
 #include "MazeFunctions.h"
 
 
-FILE *open_file(char filename[])
-{
-    FILE *file = fopen(filename, "r");
-    if (file == NULL)
-    {
-        printf("Error: invalid file\n");
-        exit(CODE_FILE_ERROR); // Exits program with return status 1.
-    }
-}
 
 int main(int argc, char const *argv[])
 {
     // Setup
+    coord *player;
+    maze *this_maze = malloc(sizeof(maze));
+    FILE *file;
+    int win = 0;
+    const char* file_name;
 
         // Check args
         if (argc != 2)
@@ -36,27 +32,41 @@ int main(int argc, char const *argv[])
         }
         else
         {
+            // Open and validate mazefile
             // Check if the file is a valid file
-            FILE *file = open_file(argv[1]);
+            file_name = get_filename_from_path(argv[1]);
+            FILE *file = open_file(file_name);
+
             if (file == NULL)
             {
                 return CODE_FILE_ERROR;
             }
         }
+
+        printf("Welcome to the Maze Game\n");
+    
+        // Read in maze file to struct
+        this_maze->width = get_width(file);
+        this_maze->height = get_height(file);
+
+        if (this_maze->width == 0 || this_maze->height == 0)
+        {
+            return CODE_MAZE_ERROR;
+        }
         
-            // Setup useful variables
-    coord *player;
-    maze *this_maze = malloc(sizeof(maze));
-    FILE *file;
-    int width, height, win;
+        
 
-    // display controls to user
+    
 
-    // Open and validate mazefile
 
     // read in maze file to struct
 
     // Play (maze game loop)
+    while (win == 0)
+    {
+        
+    }
+    
         // while the player has not made a bad move or has not yet won
             // player makes a move
                 // Check whether the move that was valid
@@ -69,5 +79,8 @@ int main(int argc, char const *argv[])
 
     // Win
 
+
+
+    return CODE_SUCCESS;
     // return, free, exit
 }

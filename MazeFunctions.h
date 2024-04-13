@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 // Maze function prototypes 
+FILE *open_file(char filename[]);
 int create_maze(maze *this, int height, int width);
 void free_maze(maze *this);
 int get_width(FILE *file);
