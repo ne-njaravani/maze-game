@@ -8,4 +8,4 @@ read -p "Commit description: " desc
 git commit -m "$desc"
 
 # Push changes
-git push origin master
+git push
