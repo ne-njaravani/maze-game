@@ -10,18 +10,8 @@
 #include <ctype.h>
 #include "MazeStructs.h"
 #include "MazeConstants.h"
+#include "FileManipulationFunctions.h"
 
-
-// Adapted from Cbootcamp: Week 4 Session 1
-FILE *open_file(char filename[])
-{
-    FILE *file = fopen(filename, "r");
-    if (file == NULL)
-    {
-        printf("Error: invalid file\n");
-        exit(1); // Exits program with return status 1.
-    }
-}
 
 /**
  * @brief Initialise a maze object - allocate memory and set attributes
@@ -109,10 +99,9 @@ int get_height(FILE *file)
     int line_width = get_width(file);
     int file_pointer;
     char char_in_line;
-    int file_height; 
-     
+    int file_height;
 
-    //if the width of the file was not valid then there's no need to check the height
+    // if the width of the file was not valid then there's no need to check the height
     if (line_width == 0)
     {
         return 0;
@@ -143,7 +132,7 @@ int get_height(FILE *file)
                         heights_of_col[i]++;
                     }
                 }
-            }            
+            }
         }
         // Check if the height of each column is the same
         for (int i = 1; i < line_width; i++)
@@ -153,7 +142,7 @@ int get_height(FILE *file)
                 return 0;
             }
         }
-        file_height = heights_of_col[0];       
+        file_height = heights_of_col[0];
     }
     rewind(file);
     return file_height;
@@ -176,7 +165,7 @@ int read_maze(maze *this, FILE *file)
     if (height == 0)
     {
         return 1;
-    }    
+    }
 
     width = get_width(file);
 
@@ -184,7 +173,7 @@ int read_maze(maze *this, FILE *file)
     {
         return 1;
     }
-    
+
     create_success = create_maze(this, height, width);
 
     if (create_success == 1)
@@ -199,9 +188,9 @@ int read_maze(maze *this, FILE *file)
         fgets(this->map[i], width, file);
     }
     // Validate that each character in the array is either: ' ', 'S', 'E', '#' or '\n'
-        // if the character is 'S' then increment num_start
-        // if the character is 'E' then increment num_end
-        // if the character is not any of the above then return 1
+    // if the character is 'S' then increment num_start
+    // if the character is 'E' then increment num_end
+    // if the character is not any of the above then return 1
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; i < width; i++)
@@ -222,10 +211,11 @@ int read_maze(maze *this, FILE *file)
             {
                 return 1;
             }
-        } 
+        }
     }
     // Validate that there is only one start and one end
-    if (num_start != 1 && num_end != 1){
+    if (num_start != 1 && num_end != 1)
+    {
         return 1;
     }
 
@@ -298,7 +288,7 @@ int move(maze *this, coord *player, char direction)
         new_y = player->y + 1;
 
         // Check if the movement is in the boundaries of the maze
-        if (this->map[new_x][new_y] == '\n' || this->map[new_x][new_y] == '#' || new_x < 0 || new_x >= this->width ||  new_y < 0 || new_y >= this->height)
+        if (this->map[new_x][new_y] == '\n' || this->map[new_x][new_y] == '#' || new_x < 0 || new_x >= this->width || new_y < 0 || new_y >= this->height)
         {
             printf("W is an invalid move\n");
             return 0;
@@ -310,15 +300,15 @@ int move(maze *this, coord *player, char direction)
             player->y = new_y;
         }
     }
-    
-    //left movement
+
+    // left movement
     if (direction == 'a' || direction == 'A')
     {
         new_x = player->x - 1;
         new_y = player->y;
 
         // Check if the movement is in the boundaries of the maze
-        if (this->map[new_x][new_y] == '\n' || this->map[new_x][new_y] == '#' || new_x < 0 || new_x >= this->width ||  new_y < 0 || new_y >= this->height)
+        if (this->map[new_x][new_y] == '\n' || this->map[new_x][new_y] == '#' || new_x < 0 || new_x >= this->width || new_y < 0 || new_y >= this->height)
         {
             printf("A is an invalid move\n");
             return 0;
@@ -329,17 +319,16 @@ int move(maze *this, coord *player, char direction)
             player->x = new_x;
             player->y = new_y;
         }
-
     }
 
-    //down movement
+    // down movement
     if (direction == 's' || direction == 'S')
     {
         new_x = player->x;
         new_y = player->y - 1;
 
         // Check if the movement is in the boundaries of the maze
-        if (this->map[new_x][new_y] == '\n' || this->map[new_x][new_y] == '#' || new_x < 0 || new_x >= this->width ||  new_y < 0 || new_y >= this->height)
+        if (this->map[new_x][new_y] == '\n' || this->map[new_x][new_y] == '#' || new_x < 0 || new_x >= this->width || new_y < 0 || new_y >= this->height)
         {
             printf("S is an invalid move\n");
             return 0;
@@ -352,14 +341,14 @@ int move(maze *this, coord *player, char direction)
         }
     }
 
-    //right movement
+    // right movement
     if (direction == 'd' || direction == 'D')
     {
         new_x = player->x + 1;
         new_y = player->y;
 
         // Check if the movement is in the boundaries of the maze
-        if (this->map[new_x][new_y] == '\n' || this->map[new_x][new_y] == '#' || new_x < 0 || new_x >= this->width ||  new_y < 0 || new_y >= this->height)
+        if (this->map[new_x][new_y] == '\n' || this->map[new_x][new_y] == '#' || new_x < 0 || new_x >= this->width || new_y < 0 || new_y >= this->height)
         {
             printf("D is an invalid move\n");
             return 0;
@@ -371,9 +360,6 @@ int move(maze *this, coord *player, char direction)
             player->y = new_y;
         }
     }
-
-
-
 }
 
 /**
@@ -385,15 +371,25 @@ int move(maze *this, coord *player, char direction)
  */
 int has_won(maze *this, coord *player)
 {
+    if (player->x == this->end.x && player->y == this->end.y && this->map[player->x][player->y] == 'E')
+    {
+        return 1;
+    }
+    return 0;
 }
 
 int main(int argc, char const *argv[])
 {
     // Setup
+
         // Check args
-            // Check if there's 2 args.
-                // print usage error
-    // Setup useful variables
+        if (argc != 2)
+        {
+            printf("./maze <mazefile path>\n");
+            return CODE_ARG_ERROR;
+        }
+        
+            // Setup useful variables
     coord *player;
     maze *this_maze = malloc(sizeof(maze));
     FILE *file;
