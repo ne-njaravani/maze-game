@@ -18,7 +18,7 @@
 int main(int argc, char const *argv[])
 {
     // Setup
-    coord *player;
+    coord *player = malloc(sizeof(coord));
     maze *this_maze = malloc(sizeof(maze));
     FILE *file;
     int valid_read, valid_create, valid_move;
@@ -73,8 +73,8 @@ int main(int argc, char const *argv[])
             free(this_maze);
             return CODE_MAZE_ERROR;
         }
-        
-        
+
+        initialise_player(player, this_maze);
 
     // Play (maze game loop)
     while (win == 0)

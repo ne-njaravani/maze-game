@@ -11,6 +11,7 @@ FILE *open_file(const char filename[])
         printf("Error: invalid file\n");
         exit(CODE_FILE_ERROR); // Exits program with return status 1.
     }
+    return file;
 }
 
 const char* get_filename_from_path(const char* path)
