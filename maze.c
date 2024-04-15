@@ -41,10 +41,6 @@ int main(int argc, char const *argv[])
         // Open and validate mazefile
         // Check if the file is a valid file
         file = open_file(argv[1]);
-        if (file == NULL)
-        {
-            return CODE_FILE_ERROR;
-        }
     }
 
     printf("Welcome to the Maze Game\n");
@@ -53,24 +49,12 @@ int main(int argc, char const *argv[])
     this_maze->width = get_width(file);
     this_maze->height = get_height(file);
 
-    if (this_maze->width == 0 || this_maze->height == 0)
-    {
-        return CODE_MAZE_ERROR;
-    }
 
     valid_create = create_maze(this_maze, this_maze->height, this_maze->width);
 
-    if (valid_create == 1)
-    {
-        return CODE_MAZE_ERROR;
-    }
+    rewind(file);
     valid_read = read_maze(this_maze, file);
 
-    if (valid_read == 1)
-    {
-        return CODE_MAZE_ERROR;
-    }
-    print_maze(this_maze, player);
 
     initialise_player(player, this_maze);
 
@@ -86,7 +70,7 @@ int main(int argc, char const *argv[])
         {
             printf("Invalid move. Try again.\n");
             printf(" %s", controls);
-            scanf("%c", &player_move);
+            scanf(" %c", &player_move);
             player_move = toupper(player_move);
             valid_move = move(this_maze, player, player_move);
         }

@@ -6,6 +6,7 @@
 
 FILE *open_file(const char filename[])
 {
+    char line[MAX_DIM];
     FILE *file = fopen(filename, "r");
     if (file == NULL)
     {
