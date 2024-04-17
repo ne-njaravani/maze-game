@@ -47,13 +47,17 @@ int main(int argc, char const *argv[])
 
     // Read in maze file to struct
     this_maze->width = get_width(file);
+    printf("Width: %d\n", this_maze->width);
     this_maze->height = get_height(file);
+    printf("Height: %d\n", this_maze->height);  
 
 
     valid_create = create_maze(this_maze, this_maze->height, this_maze->width);
+    printf("Maze created: %d\n", valid_create);
 
     rewind(file);
     valid_read = read_maze(this_maze, file);
+    printf("Maze read: %d\n", valid_read);
 
 
     initialise_player(player, this_maze);
@@ -63,6 +67,7 @@ int main(int argc, char const *argv[])
     {
         printf("%s", controls);
         scanf(" %c", &player_move);
+        printf("Player entered %c\n", player_move);
         player_move = toupper(player_move);
         valid_move = move(this_maze, player, player_move);
         // Keep asking for a move until a valid move is made
@@ -73,6 +78,7 @@ int main(int argc, char const *argv[])
             scanf(" %c", &player_move);
             player_move = toupper(player_move);
             valid_move = move(this_maze, player, player_move);
+            printf("Valid move: %d\n", valid_move);
         }
         win = has_won(this_maze, player);
     }

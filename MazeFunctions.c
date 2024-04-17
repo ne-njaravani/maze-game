@@ -242,12 +242,12 @@ int move(maze *this, coord *player, char direction)
 
         if (new_y >= 0)
         {
-            if (this->map[new_x][new_y] != '#')
+            if (this->map[new_y][new_x] != '#')
             {
-                if (this->map[new_x][new_y] == ' ' || this->map[new_x][new_y] == 'S' || this->map[new_x][new_y] == 'E')
+                if (this->map[new_y][new_x] == ' ' || this->map[new_y][new_x] == 'S' || this->map[new_y][new_x] == 'E')
                 {
                     printf("You have moved up.\n");
-                    this->map[player->x][player->y] = ' ';
+                    this->map[player->y][player->x] = ' ';
                     player->x = new_x;
                     player->y = new_y;
                 }
@@ -274,12 +274,12 @@ int move(maze *this, coord *player, char direction)
 
         if (new_x >= 0)
         {
-            if (this->map[new_x][new_y] != '#')
+            if (this->map[new_y][new_x] != '#')
             {
-                if (this->map[new_x][new_y] == ' ' || this->map[new_x][new_y] == 'S' || this->map[new_x][new_y] == 'E')
+                if (this->map[new_y][new_x] == ' ' || this->map[new_y][new_x] == 'S' || this->map[new_y][new_x] == 'E')
                 {
                     printf("You have moved left.\n");
-                    this->map[player->x][player->y] = ' ';
+                    this->map[player->y][player->x] = ' ';
                     player->x = new_x;
                     player->y = new_y;
                 }
@@ -306,12 +306,12 @@ int move(maze *this, coord *player, char direction)
         // Check if the movement is in the boundaries of the maze
         if (new_y <= this->height)
         {
-            if (this->map[new_x][new_y] != '#')
+            if (this->map[new_y][new_x] != '#')
             {
-                if (this->map[new_x][new_y] == ' ' || this->map[new_x][new_y] == 'S' || this->map[new_x][new_y] == 'E')
+                if (this->map[new_y][new_x] == ' ' || this->map[new_y][new_x] == 'S' || this->map[new_y][new_x] == 'E')
                 {
                     printf("You have moved down.\n");
-                    this->map[player->x][player->y] = ' ';
+                    this->map[player->y][player->x] = ' ';
                     player->x = new_x;
                     player->y = new_y;
                 }
@@ -338,12 +338,12 @@ int move(maze *this, coord *player, char direction)
         // Check if the movement is in the boundaries of the maze
         if (new_x <= this->width)
         {
-            if (this->map[new_x][new_y] != '#')
+            if (this->map[new_y][new_x] != '#')
             {
-                if (this->map[new_x][new_y] == ' ' || this->map[new_x][new_y] == 'S' || this->map[new_x][new_y] == 'E')
+                if (this->map[new_y][new_x] == ' ' || this->map[new_y][new_x] == 'S' || this->map[new_y][new_x] == 'E')
                 {
                     printf("You have moved right.\n");
-                    this->map[player->x][player->y] = ' ';
+                    this->map[player->y][player->x] = ' ';
                     player->x = new_x;
                     player->y = new_y;
                 }
