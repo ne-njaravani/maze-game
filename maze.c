@@ -22,13 +22,6 @@ int main(int argc, char const *argv[])
     int valid_read, valid_create, valid_move;
     int win = 0;
     char player_move;
-    const char *controls = "\n Use the following controls to move the player:\n"
-                           "W - Move up\n"
-                           "A - Move left\n"
-                           "S - Move down\n"
-                           "D - Move right\n"
-                           "M - Display the map\n"
-                           "Make your move: ";
 
     // Check args
     if (argc != 2)
@@ -65,7 +58,6 @@ int main(int argc, char const *argv[])
     // Play (maze game loop)
     while (win == 0)
     {
-        printf("%s", controls);
         scanf(" %c", &player_move);
         printf("Player entered %c\n", player_move);
         player_move = toupper(player_move);
@@ -74,7 +66,6 @@ int main(int argc, char const *argv[])
         while (valid_move == 0)
         {
             printf("Invalid move. Try again.\n");
-            printf(" %s", controls);
             scanf(" %c", &player_move);
             player_move = toupper(player_move);
             valid_move = move(this_maze, player, player_move);
