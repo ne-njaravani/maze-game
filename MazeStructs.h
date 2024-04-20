@@ -21,4 +21,5 @@ typedef struct __Maze
     coord end;
 } maze;
 
+
 #endif // MAZE_STRUCTS_H

@@ -22,6 +22,31 @@ int main(int argc, char const *argv[])
     int valid_read, valid_create, valid_move;
     int win = 0;
     char player_move;
+    char welcome_message[] = "\n \\ \\        /  ____|  |       ___|   _ \\    \\  |  ____|      __ __|  _ \\ "
+                             "\n  \\ \\  \\   /   __|    |      |      |   |  |\\/ |  __|           |   |   |"
+                             "\n   \\ \\  \\ /    |      |      |      |   |  |   |  |             |   |   |"
+                             "\n    \\_/\\_/    _____| _____| \\____| \\___/  _|  _| _____|        _|  \\___/ "
+                             "\n\n __ __|  |   |  ____|        \\  |     \\    __  /  ____|                  "
+                             "\n    |    |   |  __|         |\\/ |    _ \\      /   __|                    "
+                             "\n    |    ___ |  |           |   |   ___ \\    /    |                      "
+                             "\n   _|   _|  _| _____|      _|  _| _/    _\\ ____| _____|                  "
+                             "\n\n   ___|     \\      \\  |  ____|  |  |                                     "
+                             "\n  |  __    _ \\    |\\/ |  __|    |  |                                     "
+                             "\n  |   |   ___ \\   |   |  |     _| _|                                     "
+                             "\n \\____| _/    _\\ _|  _| _____| _) _)                                     ";
+
+    char winner_message[] = "\n     \\            \\  |     \\    __  / _ _|   \\  |   ___|  |  |  |       "
+                            "\n    _ \\          |\\/ |    _ \\      /    |     \\ |  |      |  |  |       "
+                            "\n   ___ \\ _____|  |   |   ___ \\    /     |   |\\  |  |   | _| _| _|       "
+                            "\n _/    _\\       _|  _| _/    _\\ ____| ___| _| \\_| \\____| _) _) _)       "
+                            "\n\n \\ \\   /  _ \\   |   |  ) \\ \\     /  ____|      \\ \\        /  _ \\    \\  |"
+                            "\n  \\   /  |   |  |   | /   \\ \\   /   __|         \\ \\  \\   /  |   |    \\ |"
+                            "\n     |   |   |  |   |      \\ \\ /    |            \\ \\  \\ /   |   |  |\\  |"
+                            "\n    _|  \\___/  \\___/        \\_/    _____|         \\_/\\_/   \\___/  _| \\_|"
+                            "\n\n __ __|  |   |  ____|        ___|     \\     \\   |  ____|  |  |          "
+                            "\n    |    |   |  __|         |        _ \\    |\\/ |  __|    |  |          "
+                            "\n    |    ___ |  |           |   |   ___ \\   |   |  |     _| _|          "
+                            "\n   _|   _|  _| _____|      \\____| _/    _\\ _|  _| _____| _) _)          ";
 
     // Check args
     if (argc != 2)
@@ -36,22 +61,16 @@ int main(int argc, char const *argv[])
         file = open_file(argv[1]);
     }
 
-    printf("Welcome to the Maze Game\n");
+    printf("%s\n", welcome_message);
 
     // Read in maze file to struct
     this_maze->width = get_width(file);
-    printf("Width: %d\n", this_maze->width);
     this_maze->height = get_height(file);
-    printf("Height: %d\n", this_maze->height);  
-
 
     valid_create = create_maze(this_maze, this_maze->height, this_maze->width);
-    printf("Maze created: %d\n", valid_create);
 
     rewind(file);
     valid_read = read_maze(this_maze, file);
-    printf("Maze read: %d\n", valid_read);
-
 
     initialise_player(player, this_maze);
 
