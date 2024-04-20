@@ -19,7 +19,7 @@ int main(int argc, char const *argv[])
     coord *player = malloc(sizeof(coord));
     maze *this_maze = malloc(sizeof(maze));
     FILE *file;
-    int valid_read, valid_create, valid_move;
+    int valid_move;
     int win = 0;
     char player_move;
     char welcome_message[] = "\n\n \\ \\        /  ____|  |       ___|   _ \\    \\  |  ____|      __ __|  _ \\ "
@@ -70,41 +70,11 @@ int main(int argc, char const *argv[])
 
     // Read in maze file to struct
     this_maze->width = get_width(file);
-
-    if (this_maze->width == 0)
-    {
-        return CODE_MAZE_ERROR;
-    }
-
     this_maze->height = get_height(file);
 
-    if (this_maze->height == 0)
-    {
-        return CODE_MAZE_ERROR;
-    }
+    create_maze(this_maze, this_maze->height, this_maze->width);
 
-    valid_create = create_maze(this_maze, this_maze->height, this_maze->width);
-
-    if (valid_create == 0)
-    {
-        printf("Failed to create maze\n");
-        return CODE_MAZE_ERROR;
-    }
-
-    valid_read = read_maze(this_maze, file);
-
-    if (valid_read == 0)
-    {
-        return CODE_MAZE_ERROR;
-    }
-
-
-
-    if (valid_read == 0)
-    {
-        printf("Failed to read maze\n");
-        return CODE_MAZE_ERROR;
-    }
+    read_maze(this_maze, file);
 
     printf("\n%s\n", welcome_message);
     printf("%s", controls);

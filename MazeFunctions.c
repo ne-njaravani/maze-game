@@ -21,13 +21,14 @@
  * @param width width to allocate
  * @return int 1 on success, 0 on fail
  */
-int create_maze(maze *this, int height, int width)
+void create_maze(maze *this, int height, int width)
 {
     // allocate memory for height
     this->map = malloc(height * sizeof(char *));
     if (this->map == NULL)
     {
-        return 0;
+        printf("Error: Memory allocation for the number of rows failed\n");
+        exit(CODE_MAZE_ERROR);
     }
     // allcocate memory for the width on each row
     for (int i = 0; i < height; i++)
@@ -35,10 +36,10 @@ int create_maze(maze *this, int height, int width)
         this->map[i] = malloc(width * sizeof(char));
         if (this->map[i] == NULL)
         {
-            return 0;
+            printf("Error: Memory allocation for width on each row failed\n");
+            exit(CODE_MAZE_ERROR);
         }
     }
-    return 1;
 }
 
 /**
@@ -66,19 +67,20 @@ int get_width(FILE *file)
     char line[MAX_DIM];
     if (fgets(line, MAX_DIM, file) == NULL)
     {
-        return 0;
+        printf("Invalid maze width: no width found\n");
+        exit(CODE_MAZE_ERROR);
     }
     // Remove newline character from the line length calculation
     int file_width = strcspn(line, "\n");
     if (file_width < MIN_DIM)
     {
         printf("Invalid maze width: too narrow\n");
-        return 0;
+        exit(CODE_MAZE_ERROR);
     }
     if (file_width > MAX_DIM)
     {
         printf("Invalid maze width: too wide\n");
-        return 0;
+        exit(CODE_MAZE_ERROR);
     }
     // Validate: whether each line is the same length as the first line
     int line_length;
@@ -88,7 +90,7 @@ int get_width(FILE *file)
         if (line_length != file_width)
         {
             printf("Invalid maze width: inconsistent line length\n");
-            return 0;
+            exit(CODE_MAZE_ERROR);
         }
     }
     rewind(file);
@@ -112,12 +114,12 @@ int get_height(FILE *file)
     if (file_height < MIN_DIM)
     {
         printf("Invalid maze height: too short\n");
-        return 0;
+        exit(CODE_MAZE_ERROR);
     }
     if (file_height > MAX_DIM)
     {
         printf("Invalid maze height: too tall\n");
-        return 0;
+        exit(CODE_MAZE_ERROR);
     }
     rewind(file);
     return file_height;
@@ -130,7 +132,7 @@ int get_height(FILE *file)
  * @param file Maze file pointer
  * @return int 1 on success, 0 on fail
  */
-int read_maze(maze *this, FILE *file)
+void read_maze(maze *this, FILE *file)
 {
     int num_start = 0;
     int num_end = 0;
@@ -170,34 +172,50 @@ int read_maze(maze *this, FILE *file)
         }
     }
 
+    // Validate that the only characters in the maze are '#', 'S', 'E', and ' '
+    for (int i = 0; i < this->height; i++)
+    {
+        for (int j = 0; j < this->width; j++)
+        {
+            if (this->map[i][j] != '#' && this->map[i][j] != 'S' && this->map[i][j] != 'E' && this->map[i][j] != ' ')
+            {
+                printf("Error: Invalid character in maze\n");
+                free_maze(this);
+                exit(CODE_MAZE_ERROR);
+            }
+        }
+    }
+
     // Validate that there is only one start and end point
     if (num_start < 1)
     {
         printf("Error: No start point found\n");
-        return 0;
+        free_maze(this);
+        exit(CODE_MAZE_ERROR);
     }
     else if (num_start > 1)
     {
         printf("Error: More than one start point found\n");
-        return 0;
+        free_maze(this);
+        exit(CODE_MAZE_ERROR);
     }    
 
 
     if (num_end < 1)
     {
         printf("Error: No end point found\n");
-        return 0;
+        free_maze(this);
+        exit(CODE_MAZE_ERROR);
     }
     else if (num_end > 1)
     {
         printf("Error: More than one end point found\n");
-        return 0;
+        free_maze(this);
+        exit(CODE_MAZE_ERROR);
     }
 
-
-
+    printf("Maze loaded successfully!\n");
     fclose(file);
-    return 1;
 }
 
 /**
