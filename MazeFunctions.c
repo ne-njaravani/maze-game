@@ -64,6 +64,7 @@ void free_maze(maze *this)
  */
 int get_width(FILE *file)
 {
+    rewind(file);
     char line[MAX_DIM];
     if (fgets(line, MAX_DIM, file) == NULL)
     {
@@ -105,6 +106,7 @@ int get_width(FILE *file)
  */
 int get_height(FILE *file)
 {
+    rewind(file);
     int file_height = 0;
     char line[MAX_DIM];
     while (fgets(line, MAX_DIM, file) != NULL)
@@ -118,7 +120,7 @@ int get_height(FILE *file)
     }
     if (file_height > MAX_DIM)
     {
-        printf("Invalid maze height: too tall\n");
+        printf("Invalid maze height: too long\n");
         exit(CODE_MAZE_ERROR);
     }
     rewind(file);
