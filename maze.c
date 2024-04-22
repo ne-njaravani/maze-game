@@ -11,7 +11,7 @@
 #include "MazeStructs.h"
 #include "MazeConstants.h"
 #include "FileManipulationFunctions.h"
-#include "MazeFunctions.h"    
+#include "MazeFunctions.h"
 
 int main(int argc, char const *argv[])
 {
@@ -31,7 +31,9 @@ int main(int argc, char const *argv[])
                              "\n\n   ___|     \\      \\  |  ____|  |  |                                     "
                              "\n  |  __    _ \\    |\\/ |  __|    |  |                                     "
                              "\n  |   |   ___ \\   |   |  |     _| _|                                     "
-                             "\n \\____| _/    _\\ _|  _| _____| _) _)                                     \n\n";
+                             "\n \\____| _/    _\\ _|  _| _____| _) _)                                     \n\n"
+                             "\n\nWelcome to the maze game! Your goal is to navigate through the maze and reach the end.\n"
+                             "\n\nReady for an adventure? Let's go!\n\n";
 
     char winner_message[] = "\n\n     \\            \\  |     \\    __  / _ _|   \\  |   ___|  |  |  |       "
                             "\n    _ \\          |\\/ |    _ \\      /    |     \\ |  |  __  |  |  |       "
@@ -46,12 +48,7 @@ int main(int argc, char const *argv[])
                             "\n    |    ___ |  |           |   |   ___ \\   |   |  |     _| _|          "
                             "\n   _|   _|  _| _____|      \\____| _/    _\\ _|  _| _____| _) _)          \n\n";
 
-    char controls[] = "\n\nReady for an adventure? Here's your control guide:\n"
-                      "\tW - Move up\n"
-                      "\tA - Move left\n"
-                      "\tS - Move down\n"
-                      "\tD - Move right\n"
-                      "\tM - Display the map\n\n";
+
 
     // Check args
     if (argc != 2)
@@ -75,7 +72,6 @@ int main(int argc, char const *argv[])
     read_maze(this_maze, file);
 
     printf("\n%s\n", welcome_message);
-    printf("%s", controls);
 
     initialise_player(player, this_maze);
 

@@ -262,19 +262,19 @@ void print_maze(maze *this, coord *player)
 }
 
 /**
- * @brief Validates and makes a movement in a given direction
+ * @brief Validates and makes a movement in a given direction or displays the map
  *
  * @param this Maze struct
  * @param player The player's current position
- * @param player_input The desired direction to move in
- * @return int 0 for invalid move, 1 for valid move
+ * @param player_input The desired choice of the player
+ * @return int 0 for invalid choice, 1 for valid choice
  */
-int move(maze *this, coord *player, char player_input)
+int get_choice(maze *this, coord *player, char player_input)
 {
     int new_x, new_y;
     char *direction[4] = {"UP", "DOWN", "LEFT", "RIGHT"};
     player_input = toupper(player_input);
-    char *move;
+    char *choice;
 
     switch (player_input)
     {
@@ -282,33 +282,33 @@ int move(maze *this, coord *player, char player_input)
     case 'A':
         new_x = player->x - 1;
         new_y = player->y;
-        move = direction[2];
+        choice = direction[2];
         break;
 
     case 'd':
     case 'D':
         new_x = player->x + 1;
         new_y = player->y;
-        move = direction[3];
+        choice = direction[3];
         break;
 
     case 'w':
     case 'W':
         new_x = player->x;
         new_y = player->y - 1;
-        move = direction[0];
+        choice = direction[0];
         break;
 
     case 's':
     case 'S':
         new_x = player->x;
         new_y = player->y + 1;
-        move = direction[1];
+        choice = direction[1];
         break;
 
     case 'm':
     case 'M':
-        printf("\nLoading map...\n");
+        printf("\n...LOADING MAP...\n");
         print_maze(this, player);
         printf("\n");
         return 1;
@@ -329,14 +329,14 @@ int move(maze *this, coord *player, char player_input)
 
     if (this->map[new_y][new_x] == '#')
     {
-        printf("Oops! Trying to phase through walls? You're not The Flash!\nLet's stick to the open paths.\n");
+        printf("Whoa there pal! You're no ghost, the walls are there for a reason\nLet's stick to the open paths.\n");
         return 0;
     }
     else
     {
         player->x = new_x;
         player->y = new_y;
-        printf("You have moved %s.\n", move);
+        printf("You have moved %s.\n", choice);
     }
 
     return 1;
@@ -363,21 +363,46 @@ int has_won(maze *this, coord *player)
 
 int game_loop(maze *this_maze, coord *player)
 {
-    int valid_move;
-    char player_move;
+    int valid_choice;
+    char player_choice[3];
+    char controls[] = "\n\nHere's your control guide:\n"
+                      "\tW - Move up\n"
+                      "\tA - Move left\n"
+                      "\tS - Move down\n"
+                      "\tD - Move right\n"
+                      "\tM - Display the map\n\n";
 
-    printf("\nEnter your move: ");
-    scanf(" %c", &player_move);
-    player_move = toupper(player_move);
-    valid_move = move(this_maze, player, player_move);
-    // Keep asking for a move until a valid move is made
-    while (valid_move == 0)
+    do
     {
-        printf("\nEnter your move: \n");
-        scanf(" %c", &player_move);
-        player_move = toupper(player_move);
-        valid_move = move(this_maze, player, player_move);
-        printf("\n");
-    }
+        printf("%s", controls);
+        printf("Enter your choice: ");
+        fgets(player_choice, 3, stdin); // Read up to 2 characters and \n
+
+        // Check for newline character
+        if (strchr(player_choice, '\n') != NULL)
+        {
+            player_choice[strcspn(player_choice, "\n")] = '\0';
+
+            // Check if input is exactly 1 character
+            if (strlen(player_choice) == 1)
+            {
+                valid_choice = get_choice(this_maze, player, player_choice[0]);
+            }
+            else
+            {
+                printf("\nIt seems you've mastered the art of invisibility... for characters."
+                       "\nLet's try entering a visible one, shall we?\n");
+                valid_choice = 0;
+            }
+        }
+        else
+        {
+            while (getchar() != '\n')
+                ; // Clear the input buffer
+            printf("\nWhoa there! You're not writing a novel.\n"
+                   "Just one character will do the trick.\n");
+            valid_choice = 0;
+        }
+    } while (valid_choice == 0);
     return has_won(this_maze, player);
 }
