@@ -14,6 +14,6 @@ void initialise_player(coord *player, maze *this);
 void print_maze(maze *this, coord *player);
 int move(maze *this, coord *player, char player_input);
 int has_won(maze *this, coord *player);
-// Make a function for the prints that will occur in the main function
+int game_loop(maze *this_maze, coord *player);
 
 #endif // MAZE_FUNCTIONS_H

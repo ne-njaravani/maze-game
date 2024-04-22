@@ -4,6 +4,12 @@
 #include "MazeConstants.h"
 #include "FileManipulationFunctions.h"
 
+/**
+ * @brief Open a file and return a pointer to it
+ * 
+ * @param filename the name of the file to open
+ * @return FILE* the pointer to the file
+ */
 FILE *open_file(const char filename[])
 {
     FILE *file = fopen(filename, "r");

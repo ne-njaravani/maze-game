@@ -188,7 +188,8 @@ void read_maze(maze *this, FILE *file)
         }
     }
 
-    // Validate that there is only one start and end point
+    // Validate that there is only one start and end point in the maze
+
     if (num_start < 1)
     {
         printf("Error: No start point found\n");
@@ -200,8 +201,7 @@ void read_maze(maze *this, FILE *file)
         printf("Error: More than one start point found\n");
         free_maze(this);
         exit(CODE_MAZE_ERROR);
-    }    
-
+    }
 
     if (num_end < 1)
     {
@@ -336,7 +336,7 @@ int move(maze *this, coord *player, char player_input)
     {
         player->x = new_x;
         player->y = new_y;
-         printf("You have moved %s.\n", move);
+        printf("You have moved %s.\n", move);
     }
 
     return 1;
@@ -359,4 +359,25 @@ int has_won(maze *this, coord *player)
     {
         return 0;
     }
+}
+
+int game_loop(maze *this_maze, coord *player)
+{
+    int valid_move;
+    char player_move;
+
+    printf("\nEnter your move: ");
+    scanf(" %c", &player_move);
+    player_move = toupper(player_move);
+    valid_move = move(this_maze, player, player_move);
+    // Keep asking for a move until a valid move is made
+    while (valid_move == 0)
+    {
+        printf("\nEnter your move: \n");
+        scanf(" %c", &player_move);
+        player_move = toupper(player_move);
+        valid_move = move(this_maze, player, player_move);
+        printf("\n");
+    }
+    return has_won(this_maze, player);
 }

@@ -11,7 +11,7 @@
 #include "MazeStructs.h"
 #include "MazeConstants.h"
 #include "FileManipulationFunctions.h"
-#include "MazeFunctions.h"
+#include "MazeFunctions.h"    
 
 int main(int argc, char const *argv[])
 {
@@ -19,9 +19,7 @@ int main(int argc, char const *argv[])
     coord *player = malloc(sizeof(coord));
     maze *this_maze = malloc(sizeof(maze));
     FILE *file;
-    int valid_move;
     int win = 0;
-    char player_move;
     char welcome_message[] = "\n\n \\ \\        /  ____|  |       ___|   _ \\    \\  |  ____|      __ __|  _ \\ "
                              "\n  \\ \\  \\   /   __|    |      |      |   |  |\\/ |  __|           |   |   |"
                              "\n   \\ \\  \\ /    |      |      |      |   |  |   |  |             |   |   |"
@@ -84,24 +82,12 @@ int main(int argc, char const *argv[])
     // Play (maze game loop)
     while (win == 0)
     {
-        printf("\nEnter your move: ");
-        scanf(" %c", &player_move);
-        player_move = toupper(player_move);
-        valid_move = move(this_maze, player, player_move);
-        // Keep asking for a move until a valid move is made
-        while (valid_move == 0)
-        {
-            printf("\nEnter your move: \n");
-            scanf(" %c", &player_move);
-            player_move = toupper(player_move);
-            valid_move = move(this_maze, player, player_move);
-            printf("\n");
-        }
-        win = has_won(this_maze, player);
+        win = game_loop(this_maze, player);
     }
 
     printf("\n%s\n", winner_message);
     free_maze(this_maze);
+    free(player);
     return CODE_SUCCESS;
     // return, free, exit
 }
