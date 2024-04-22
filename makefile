@@ -9,4 +9,4 @@ maze: $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $^
 
 clean:
-	rm -f maze $(OBJS)
+	rm -f maze $(OBJS)z
