@@ -4,6 +4,9 @@
         "cstring": "cpp",
         "ctype.h": "c",
         "mazestructs.h": "c",
-        "filemanipulationfunctions.h": "c"
+        "filemanipulationfunctions.h": "c",
+        "mazeconstants.h": "c",
+        "playeroperations.h": "c",
+        "gamemessages.h": "c"
     }
 }

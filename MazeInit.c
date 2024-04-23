@@ -1,7 +1,7 @@
 /**
- * @file MazeFunctions.c
+ * @file MazeInit.c
  * @author Ngakudzweishe E. (Eben) Njaravani
- * @brief Functions for the maze game
+ * @brief Functions to initialise the maze to be used in the game
  */
 
 #include <stdio.h>
@@ -11,7 +11,10 @@
 #include "MazeStructs.h"
 #include "MazeConstants.h"
 #include "FileManipulationFunctions.h"
-#include "MazeFunctions.h"
+#include "GameLogic.h"
+#include "MazeInit.h"
+#include "PlayerOperations.h"
+#include "GameMessages.h"
 
 /**
  * @brief Initialise a maze object - allocate memory and set attributes (Remember to free)
@@ -139,6 +142,7 @@ int get_height(FILE *file)
     return file_height;
 }
 
+
 /**
  * @brief read in a maze file into a struct
  *
@@ -231,191 +235,4 @@ void read_maze(maze *this, FILE *file)
 
     printf("Maze loaded successfully!\n");
     fclose(file);
-}
-
-/**
- * @brief Set the player's position to the start of the maze
- *
- * @param player the player's position
- * @param this the maze to use
- */
-void initialise_player(coord *player, maze *this)
-{
-    player->x = this->start.x;
-    player->y = this->start.y;
-}
-
-/**
- * @brief Prints the maze out - code provided to ensure correct formatting
- *
- * @param this pointer to maze to print
- * @param player the current player location
- */
-void print_maze(maze *this, coord *player)
-{
-    // make sure we have a leading newline..
-    printf("\n");
-    for (int i = 0; i < this->height; i++)
-    {
-        for (int j = 0; j < this->width; j++)
-        {
-            // decide whether player is on this spot or not
-            if (player->x == j && player->y == i)
-            {
-                printf("X");
-            }
-            else
-            {
-                printf("%c", this->map[i][j]);
-            }
-        }
-        // end each row with a newline.
-        printf("\n");
-    }
-}
-
-/**
- * @brief Validates and makes a movement in a given direction or displays the map
- *
- * @param this Maze struct
- * @param player The player's current position
- * @param player_input The desired choice of the player
- * @return int 0 for invalid choice, 1 for valid choice
- */
-int get_choice(maze *this, coord *player, char player_input)
-{
-    int new_x, new_y;
-    char *direction[4] = {"UP", "DOWN", "LEFT", "RIGHT"};
-    player_input = toupper(player_input);
-    char *choice;
-
-    switch (player_input)
-    {
-    case 'a':
-    case 'A':
-        new_x = player->x - 1;
-        new_y = player->y;
-        choice = direction[2];
-        break;
-
-    case 'd':
-    case 'D':
-        new_x = player->x + 1;
-        new_y = player->y;
-        choice = direction[3];
-        break;
-
-    case 'w':
-    case 'W':
-        new_x = player->x;
-        new_y = player->y - 1;
-        choice = direction[0];
-        break;
-
-    case 's':
-    case 'S':
-        new_x = player->x;
-        new_y = player->y + 1;
-        choice = direction[1];
-        break;
-
-    case 'm':
-    case 'M':
-        printf("\n...LOADING MAP...\n");
-        print_maze(this, player);
-        printf("\n");
-        return 1;
-        break;
-
-    default:
-        printf("Whoa! That input was invalid.\nLet's stick to the game's controls, shall we?\n");
-        return 0;
-        break;
-    }
-
-    // Check if the movement is in the boundaries of the maze
-    if (new_x < 0 || new_x >= this->width || new_y < 0 || new_y >= this->height)
-    {
-        printf("Hold on, explorer! The secret to solving the maze is staying within its boundaries.\nLet's try another direction!\n");
-        return 0;
-    }
-
-    if (this->map[new_y][new_x] == '#')
-    {
-        printf("Whoa there pal! You're no ghost, the walls are there for a reason\nLet's stick to the open paths.\n");
-        return 0;
-    }
-    else
-    {
-        player->x = new_x;
-        player->y = new_y;
-        printf("You have moved %s.\n", choice);
-    }
-
-    return 1;
-}
-
-/**
- * @brief Check whether the player has won and return a pseudo-boolean
- *
- * @param this current maze
- * @param player player position
- * @return int 0 for false, 1 for true
- */
-int has_won(maze *this, coord *player)
-{
-    if (player->x == this->end.x && player->y == this->end.y)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-int game_loop(maze *this_maze, coord *player)
-{
-    int valid_choice;
-    char player_choice[3];
-    char controls[] = "\n\nHere's your control guide:\n"
-                      "\tW - Move up\n"
-                      "\tA - Move left\n"
-                      "\tS - Move down\n"
-                      "\tD - Move right\n"
-                      "\tM - Display the map\n\n";
-
-    do
-    {
-        printf("%s", controls);
-        printf("Enter your choice: ");
-        fgets(player_choice, 3, stdin); // Read up to 2 characters and \n
-
-        // Check for newline character
-        if (strchr(player_choice, '\n') != NULL)
-        {
-            player_choice[strcspn(player_choice, "\n")] = '\0';
-
-            // Check if input is exactly 1 character
-            if (strlen(player_choice) == 1)
-            {
-                valid_choice = get_choice(this_maze, player, player_choice[0]);
-            }
-            else
-            {
-                printf("\nIt seems you've mastered the art of invisibility... for characters."
-                       "\nLet's try entering a visible one, shall we?\n");
-                valid_choice = 0;
-            }
-        }
-        else
-        {
-            while (getchar() != '\n')
-                ; // Clear the input buffer
-            printf("\nWhoa there! You're not writing a novel.\n"
-                   "Just one character will do the trick.\n");
-            valid_choice = 0;
-        }
-    } while (valid_choice == 0);
-    return has_won(this_maze, player);
 }

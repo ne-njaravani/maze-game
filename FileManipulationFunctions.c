@@ -1,3 +1,9 @@
+/**
+ * @file FileManipulationFunctions.c
+ * @author Ngakudzweishe E. (Eben) Njaravani
+ * @brief General file manipulation functions
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

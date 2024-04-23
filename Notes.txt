@@ -1,3 +1,0 @@
-Issues
-- File isn't noticing missing start pointer
-- 

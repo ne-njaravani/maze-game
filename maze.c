@@ -1,7 +1,7 @@
 /**
  * @file maze.c
  * @author Ngakudzweishe E. (Eben) Njaravani
- * @brief Code for the maze game
+ * @brief Main function to run the maze game
  */
 
 #include <stdio.h>
@@ -11,8 +11,18 @@
 #include "MazeStructs.h"
 #include "MazeConstants.h"
 #include "FileManipulationFunctions.h"
-#include "MazeFunctions.h"
+#include "GameLogic.h"
+#include "MazeInit.h"
+#include "PlayerOperations.h"
+#include "GameMessages.h"
 
+/**
+ * @brief Main function to run the maze game
+ *
+ * @param argc number of arguments
+ * @param argv arguments
+ * @return int return 0 if game is successful, or 1, 2, 3 on error
+ */
 int main(int argc, char const *argv[])
 {
     // Setup
@@ -20,34 +30,6 @@ int main(int argc, char const *argv[])
     maze *this_maze = malloc(sizeof(maze));
     FILE *file;
     int win = 0;
-    char welcome_message[] = "\n\n \\ \\        /  ____|  |       ___|   _ \\    \\  |  ____|      __ __|  _ \\ "
-                             "\n  \\ \\  \\   /   __|    |      |      |   |  |\\/ |  __|           |   |   |"
-                             "\n   \\ \\  \\ /    |      |      |      |   |  |   |  |             |   |   |"
-                             "\n    \\_/\\_/    _____| _____| \\____| \\___/  _|  _| _____|        _|  \\___/ "
-                             "\n\n __ __|  |   |  ____|        \\  |     \\    __  /  ____|                  "
-                             "\n    |    |   |  __|         |\\/ |    _ \\      /   __|                    "
-                             "\n    |    ___ |  |           |   |   ___ \\    /    |                      "
-                             "\n   _|   _|  _| _____|      _|  _| _/    _\\ ____| _____|                  "
-                             "\n\n   ___|     \\      \\  |  ____|  |  |                                     "
-                             "\n  |  __    _ \\    |\\/ |  __|    |  |                                     "
-                             "\n  |   |   ___ \\   |   |  |     _| _|                                     "
-                             "\n \\____| _/    _\\ _|  _| _____| _) _)                                     \n\n"
-                             "\n\nWelcome to the maze game! Your goal is to navigate through the maze and reach the end.\n"
-                             "\n\nReady for an adventure? Let's go!\n\n";
-
-    char winner_message[] = "\n\n     \\            \\  |     \\    __  / _ _|   \\  |   ___|  |  |  |       "
-                            "\n    _ \\          |\\/ |    _ \\      /    |     \\ |  |  __  |  |  |       "
-                            "\n   ___ \\ _____|  |   |   ___ \\    /     |   |\\  |  |   | _| _| _|       "
-                            "\n _/    _\\       _|  _| _/    _\\ ____| ___| _| \\_| \\____| _) _) _) (Yes pun intended)      "
-                            "\n\n \\ \\   /  _ \\   |   |  ) \\ \\     /  ____|      \\ \\        /  _ \\    \\  |"
-                            "\n  \\   /  |   |  |   | /   \\ \\   /   __|         \\ \\  \\   /  |   |    \\ |"
-                            "\n     |   |   |  |   |      \\ \\ /    |            \\ \\  \\ /   |   |  |\\  |"
-                            "\n    _|  \\___/  \\___/        \\_/    _____|         \\_/\\_/   \\___/  _| \\_|"
-                            "\n\n __ __|  |   |  ____|        ___|     \\     \\   |  ____|  |  |          "
-                            "\n    |    |   |  __|         |  __    _ \\    |\\/ |  __|    |  |          "
-                            "\n    |    ___ |  |           |   |   ___ \\   |   |  |     _| _|          "
-                            "\n   _|   _|  _| _____|      \\____| _/    _\\ _|  _| _____| _) _)          \n\n";
-
 
 
     // Check args
@@ -63,27 +45,26 @@ int main(int argc, char const *argv[])
         file = open_file(argv[1]);
     }
 
-    // Read in maze file to struct
+    // Get the maze dimensions
     this_maze->width = get_width(file);
     this_maze->height = get_height(file);
 
+    // Initialise the maze and player
     create_maze(this_maze, this_maze->height, this_maze->width);
-
     read_maze(this_maze, file);
-
-    printf("\n%s\n", welcome_message);
-
+    welcome_message();
     initialise_player(player, this_maze);
 
-    // Play (maze game loop)
+    // Play the game
     while (win == 0)
     {
         win = game_loop(this_maze, player);
     }
 
-    printf("\n%s\n", winner_message);
+    winner_message();
+
+    // Clean up
     free_maze(this_maze);
     free_player(player);
     return CODE_SUCCESS;
-    // return, free, exit
 }
