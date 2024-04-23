@@ -1,0 +1,42 @@
+say for example I have a function a in c
+
+and I have a main function int main(int argc, char const *argv[])
+
+in function a, whats the difference when using exit(1); and return(1)
+
+
+In C, `exit(1);` and `return(1);` are used to terminate a program, but they operate differently:
+
+- `exit(1);`
+  - **Terminates the entire program**: Regardless of where it is called, `exit` will terminate the program execution immediately.
+  - **Does not return to the calling function**: After `exit` is called, the control does not return to the function that called the function where `exit` was invoked.
+  - **Can be called from any function**: `exit` can be used in any function, not just `main`.
+  - **Returns a status to the operating system**: The argument passed to `exit` (in this case, `1`) is returned to the operating system as the program's exit status.
+
+- `return(1);`
+  - **Returns control to the calling function**: If `return` is used in a function other than `main`, it will return control to the function that called it.
+  - **Only terminates the current function**: `return` will only end the execution of the current function, not the entire program.
+  - **In `main`, it ends the program**: When used in `main`, `return` will terminate the program since `main` is the entry point of the program.
+  - **Returns a status to the operating system**: Similar to `exit`, the value returned by `main` (in this case, `1`) is used as the program's exit status.
+
+In summary, `exit` is used to immediately end the program execution and return a status to the operating system, while `return` is used to end the execution of the current 
+function and return control to the function that called it. When `return` is used in `main`, it also ends the program and returns a status to the operating system. The status code `1` typically indicates that the program terminated with an error.
+
+
+ne-njaravani: In c, am I able to get a character on a line of a file at a particular position i? Do not give code.
+
+GitHub Copilot: Yes, in C, you can get a character on a line of a file at a particular position 'i'. You would need to use a combination of file handling functions.
+ First, you would open the file using `fopen()`. Then, you would use `fseek()` to move the file pointer to the desired position 'i'. Finally, you would use `fgetc()` to get the character at that position. Please note that you would need to calculate 
+ the position 'i' considering the newline characters that separate the lines.
+
+ 
+
+ne-njaravani: For this function header "int get_width(FILE *file)" does FILE *file mean the parameter is the filename or is the whole file object parsed to the function. Do not provide code for the function.
+
+GitHub Copilot: The `FILE *file` parameter in the function `int get_width(FILE *file)` is a pointer to a `FILE` object, not a filename. This `FILE` object represents a stream that can be used to read from or write to a file. The `FILE` object is 
+typically obtained by calling the `fopen` function, which opens a file and returns a `FILE` pointer. This pointer is then passed to other functions that read from or write to the file.
+
+ne-njaravani: so will the file object be opened within the function or should it have already been opened to be able to parse it as a parameter?
+
+GitHub Copilot: The `FILE *file` parameter should already be an opened file before it is passed to the `get_width` function. The function `get_width` is not responsible for opening the file, it only uses the already opened file to perform its operations.
+ The file should be opened elsewhere in your code, typically before calling `get_width`.

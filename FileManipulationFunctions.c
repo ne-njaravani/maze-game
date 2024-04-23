@@ -1,7 +1,7 @@
 /**
  * @file FileManipulationFunctions.c
  * @author Ngakudzweishe E. (Eben) Njaravani
- * @brief General file manipulation functions
+ * @brief File manipulation functions
  */
 
 #include <stdio.h>

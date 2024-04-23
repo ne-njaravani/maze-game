@@ -86,6 +86,7 @@ int get_choice(maze *this, coord *player, char player_input)
     player_input = toupper(player_input);
     char *choice;
 
+    // Check the player's choice
     switch (player_input)
     {
     case 'a':

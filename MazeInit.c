@@ -215,7 +215,7 @@ void read_maze(maze *this, FILE *file)
     }
     else if (num_start > 1)
     {
-        printf("Error: More than one start point found\n");
+        printf("Error: More than 1 start point found\n");
         free_maze(this);
         exit(CODE_MAZE_ERROR);
     }
@@ -228,7 +228,7 @@ void read_maze(maze *this, FILE *file)
     }
     else if (num_end > 1)
     {
-        printf("Error: More than one end point found\n");
+        printf("Error: More than 1 end point found\n");
         free_maze(this);
         exit(CODE_MAZE_ERROR);
     }

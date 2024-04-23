@@ -1,5 +1,0 @@
-Topic: Reading a character from a file at a specified point in the line
-
-ne-njaravani: In c, am I able to get a character on a line of a file at a particular position i? Do not give code.
-
-GitHub Copilot: Yes, in C, you can get a character on a line of a file at a particular position 'i'. You would need to use a combination of file handling functions. First, you would open the file using `fopen()`. Then, you would use `fseek()` to move the file pointer to the desired position 'i'. Finally, you would use `fgetc()` to get the character at that position. Please note that you would need to calculate the position 'i' considering the newline characters that separate the lines.

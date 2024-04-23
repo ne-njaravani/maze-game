@@ -35,7 +35,7 @@ int main(int argc, char const *argv[])
     // Check args
     if (argc != 2)
     {
-        printf("./maze <mazefile path>\n");
+        printf("Usage: ./maze <mazefile path>\n");
         return CODE_ARG_ERROR;
     }
     else
