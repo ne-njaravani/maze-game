@@ -83,7 +83,7 @@ int main(int argc, char const *argv[])
 
     printf("\n%s\n", winner_message);
     free_maze(this_maze);
-    free(player);
+    free_player(player);
     return CODE_SUCCESS;
     // return, free, exit
 }

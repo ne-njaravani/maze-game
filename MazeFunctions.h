@@ -7,6 +7,7 @@
 // Maze function prototypes 
 void create_maze(maze *this, int height, int width);
 void free_maze(maze *this);
+void free_player(coord *player);
 int get_width(FILE *file);
 int get_height(FILE *file);
 void read_maze(maze *this, FILE *file);

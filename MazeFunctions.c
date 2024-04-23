@@ -14,7 +14,7 @@
 #include "MazeFunctions.h"
 
 /**
- * @brief Initialise a maze object - allocate memory and set attributes
+ * @brief Initialise a maze object - allocate memory and set attributes (Remember to free)
  *
  * @param this pointer to the maze to be initialised
  * @param height height to allocate
@@ -37,6 +37,12 @@ void create_maze(maze *this, int height, int width)
         if (this->map[i] == NULL)
         {
             printf("Error: Memory allocation for width on each row failed\n");
+            // free the memory allocated so far
+            for (int j = 0; j < i; j++)
+            {
+                free(this->map[j]);
+            }
+            free(this->map);
             exit(CODE_MAZE_ERROR);
         }
     }
@@ -49,10 +55,16 @@ void create_maze(maze *this, int height, int width)
  */
 void free_maze(maze *this)
 {
-    // free each row of the map
-    for (int i = 0; i < this->height; i++)
+    if (this != NULL)
     {
-        free(this->map[i]);
+        // free the rows in the map
+        for (int i = 0; i < this->height; i++)
+        {
+            free(this->map[i]);
+        }
+        free(this->map);
+        // free the struct
+        free(this);
     }
 }
 
@@ -175,6 +187,7 @@ void read_maze(maze *this, FILE *file)
     }
 
     // Validate that the only characters in the maze are '#', 'S', 'E', and ' '
+
     for (int i = 0; i < this->height; i++)
     {
         for (int j = 0; j < this->width; j++)
