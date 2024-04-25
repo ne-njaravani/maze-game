@@ -142,7 +142,6 @@ int get_height(FILE *file)
     return file_height;
 }
 
-
 /**
  * @brief read in a maze file into a struct
  *

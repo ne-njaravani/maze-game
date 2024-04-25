@@ -1,7 +1,7 @@
 /**
  * @file MazeInit.c
  * @author Ngakudzweishe E. (Eben) Njaravani
- * @brief Functions to initialise the maze to be used in the game
+ * @brief Functions to print o
  */
 
 #include <stdio.h>
@@ -54,4 +54,14 @@ void winner_message()
            "\n    |    |   |  __|         |  __    _ \\    |\\/ |  __|    |  |          "
            "\n    |    ___ |  |           |   |   ___ \\   |   |  |     _| _|          "
            "\n   _|   _|  _| _____|      \\____| _/    _\\ _|  _| _____| _) _)          \n\n");
+}
+
+void controls_message()
+{
+    printf("\n\nHere's your control guide:\n"
+           "\tW - Move up\n"
+           "\tA - Move left\n"
+           "\tS - Move down\n"
+           "\tD - Move right\n"
+           "\tM - Display the map\n\n");
 }

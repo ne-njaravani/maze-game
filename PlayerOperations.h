@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Maze function prototypes 
+// Maze function prototypes
 void initialise_player(coord *player, maze *this);
 void print_maze(maze *this, coord *player);
 int get_choice(maze *this, coord *player, char player_input);

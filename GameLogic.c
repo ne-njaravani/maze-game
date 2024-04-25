@@ -15,7 +15,6 @@
 #include "MazeInit.h"
 #include "PlayerOperations.h"
 
-
 /**
  * @brief Check whether the player has won i.e. reached the end-point of the maze
  *
@@ -47,16 +46,10 @@ int game_loop(maze *this_maze, coord *player)
 {
     int valid_choice;
     char player_choice[3];
-    char controls[] = "\n\nHere's your control guide:\n"
-                      "\tW - Move up\n"
-                      "\tA - Move left\n"
-                      "\tS - Move down\n"
-                      "\tD - Move right\n"
-                      "\tM - Display the map\n\n";
 
     do
     {
-        printf("%s", controls);
+        printf("%s", controls_message());
         printf("Enter your choice: ");
 
         // Read up to 2 characters and \n
@@ -84,9 +77,9 @@ int game_loop(maze *this_maze, coord *player)
         else
         {
             while (getchar() != '\n')
-                ; // Clear the input buffer
-            printf("\nWhoa there! You're not writing a novel.\n"
-                   "Just one character will do the trick.\n");
+                // Clear the input buffer
+                printf("\nWhoa there! You're not writing a novel.\n"
+                       "Just one character will do the trick.\n");
             valid_choice = 0;
         }
     } while (valid_choice == 0);

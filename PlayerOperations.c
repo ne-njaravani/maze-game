@@ -16,7 +16,6 @@
 #include "PlayerOperations.h"
 #include "GameMessages.h"
 
-
 /**
  * @brief Set the player's position to the start of the maze
  *

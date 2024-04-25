@@ -31,7 +31,6 @@ int main(int argc, char const *argv[])
     FILE *file;
     int win = 0;
 
-
     // Check args
     if (argc != 2)
     {

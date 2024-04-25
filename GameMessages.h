@@ -3,5 +3,6 @@
 
 void welcome_message();
 void winner_message();
+void controls_message();
 
 #endif // GAME_MESSAGES_H
