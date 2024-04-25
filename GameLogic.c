@@ -14,6 +14,7 @@
 #include "GameLogic.h"
 #include "MazeInit.h"
 #include "PlayerOperations.h"
+#include "GameMessages.h"
 
 /**
  * @brief Check whether the player has won i.e. reached the end-point of the maze
@@ -49,7 +50,7 @@ int game_loop(maze *this_maze, coord *player)
 
     do
     {
-        printf("%s", controls_message());
+        controls_message();
         printf("Enter your choice: ");
 
         // Read up to 2 characters and \n
