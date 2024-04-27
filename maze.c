@@ -25,7 +25,7 @@
  */
 int main(int argc, char const *argv[])
 {
-    // Setup
+    // Setup variables
     coord *player = malloc(sizeof(coord));
     maze *this_maze = malloc(sizeof(maze));
     FILE *file;
