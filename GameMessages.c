@@ -1,7 +1,7 @@
 /**
  * @file MazeInit.c
  * @author Ngakudzweishe E. (Eben) Njaravani
- * @brief Functions to print o
+ * @brief Functions to print the controls and ascii art messages
  */
 
 #include <stdio.h>

@@ -70,17 +70,17 @@ int game_loop(maze *this_maze, coord *player)
             }
             else
             {
-                printf("\nIt seems you've mastered the art of invisibility... for characters."
+                printf("\nI see you've entered an invisible character...."
                        "\nLet's try entering a visible one, shall we?\n");
                 valid_choice = 0;
             }
         }
         else
         {
+            printf("\nWhoa there mate!\nJust one character will do the trick.\n");
             while (getchar() != '\n')
                 // Clear the input buffer
-                printf("\nWhoa there! You're not writing a novel.\n"
-                       "Just one character will do the trick.\n");
+            
             valid_choice = 0;
         }
     } while (valid_choice == 0);

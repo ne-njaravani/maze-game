@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Structure for the player's current position in the 2d array/ maze
+// Structure for the player's current position in the maze
 typedef struct __Coord
 {
     int x;
