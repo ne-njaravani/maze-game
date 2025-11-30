@@ -76,6 +76,12 @@ int get_maze_choice(void)
                 printf("Invalid input. Please enter only 1 or 2.\n");
             }
         }
+        else
+        {
+            // EOF reached, exit with error
+            printf("Input error. Exiting.\n");
+            exit(CODE_ARG_ERROR);
+        }
     }
     return 1; // Default to premade
 }
