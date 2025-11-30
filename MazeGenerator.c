@@ -100,11 +100,11 @@ void generate_maze(maze *this, int height, int width)
     if (width % 2 == 0)
         width++;
 
-    // Cap at MAX_DIM
+    // Cap at MAX_DIM (ensure odd after capping)
     if (height > MAX_DIM)
-        height = MAX_DIM - 1;
+        height = (MAX_DIM % 2 == 0) ? MAX_DIM - 1 : MAX_DIM;
     if (width > MAX_DIM)
-        width = MAX_DIM - 1;
+        width = (MAX_DIM % 2 == 0) ? MAX_DIM - 1 : MAX_DIM;
 
     // Set maze dimensions
     this->height = height;
