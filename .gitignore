@@ -1,0 +1,13 @@
+# Build artifacts
+*.o
+maze
+
+# Temporary files
+tmp
+*.tmp
+
+# Editor files
+.vscode/
+*.swp
+*.swo
+*~
