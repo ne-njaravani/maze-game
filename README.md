@@ -15,6 +15,7 @@ A console-based maze navigation game developed in C with a focus on Test-Driven 
 - [Testing](#testing)
 - [Technical Details](#technical-details)
 - [What I Learned](#what-i-learned-)
+- [License](#license)
 
 ## Game Objective 🎯
 
@@ -191,4 +192,6 @@ See [`test-plan.md`](test-plan.md) for detailed test cases.
 
 ---
 
-**Developed with Test-Driven Development principles**
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
