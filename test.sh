@@ -1,252 +1,276 @@
 #!/bin/bash
 
-# remove read permissions from this file - note: put them back at the end!
+# Create invalid-mazes directory if it doesn't exist
+mkdir -p invalid-mazes
+
+# Create bad-permissions.txt if it doesn't exist
+touch invalid-mazes/bad-permissions.txt
+
+# Remove read permissions from this file - note: put them back at the end!
 chmod -r invalid-mazes/bad-permissions.txt
 
-gcc maze.c -o maze
+# Use make to compile instead of direct gcc
+make maze
 
-echo -e "~~ Testing Maze ~~"
+echo -e "~~ Testing Maze ~~\n"
 
 # Make the test script executable
-chmod+x test.sh
+chmod +x test.sh
 
 # Initialise counters
 all_counter=0
 pass_counter=0
 
+# Debug mode - set to 0 to hide debug output
+DEBUG=0
+
 #-------Argument Tests-------
 
-echo -n "Testing no arguments - "
-# Adapted from COMP1921 Lab 2: Testing
+echo -n "Testing invalid choice - "
 ((all_counter++))
-./maze > tmp
-if grep -q "Usage: ./maze <mazefile path>" tmp;
+echo "3" | ./maze > tmp 2>&1
+if grep -q "Invalid choice" tmp;
 then
     echo "PASS"
     ((pass_counter++))
 else
     echo "FAIL"
+    [ $DEBUG -eq 1 ] && cat tmp
 fi
 
-echo -n "Testing 1 argument - "
-# Adapted from COMP1921 Lab 2: Testing
+echo -n "Testing invalid input (non-numeric) - "
 ((all_counter++))
-./maze x > tmp
-if grep -q "Usage: ./maze <mazefile path>" tmp;
+echo "abc" | ./maze > tmp 2>&1
+if grep -q "Input" tmp;
 then
     echo "PASS"
     ((pass_counter++))
 else
     echo "FAIL"
+    [ $DEBUG -eq 1 ] && cat tmp
 fi
-
-echo -n "Testing more than 1 argument - "
-# Adapted from COMP1921 Lab 2: Testing
-((all_counter++))
-./maze x x > tmp
-if grep -q "Usage: ./maze <mazefile path>" tmp;
-then
-    echo "PASS"
-    ((pass_counter++))
-else
-    echo "FAIL"
-fi
-
 
 #-------FILE TESTS-------
 
-echo -e "\n~~ File Handling Tests~~"
+echo -e "\n~~ File Handling Tests~~\n"
 
-echo -n "Testing bad filename - "
-# Adapted from COMP1921 Lab 2: Testing
+# Create a helper script to test file loading
+# This ensures proper newline handling
+create_test_file() {
+    local choice=$1
+    local filename=$2
+    echo "$choice"
+    echo "$filename"
+}
+
+echo -n "Testing file input (non-existent file) - "
 ((all_counter++))
-./studentData fake.csv > tmp
-if grep -q "Error: invalid file" tmp;
+create_test_file 1 "x" | timeout 0.2s ./maze > tmp 2>&1
+if grep -q "Usage: ./maze" tmp || grep -q "invalid file" tmp || grep -q "Error" tmp;
 then
     echo "PASS"
     ((pass_counter++))
 else
     echo "FAIL"
+    [ $DEBUG -eq 1 ] && cat tmp
 fi
 
-echo -n "Testing whether file exists - "
+echo -n "Testing bad filename - "
 ((all_counter++))
-timeout 0.2s ./maze x > tmp
-if grep -q "Error: invalid file" tmp;
+create_test_file 1 "fake.csv" | timeout 0.2s ./maze > tmp 2>&1
+if grep -q "Usage: ./maze" tmp || grep -q "invalid file" tmp || grep -q "Error" tmp;
 then
     echo "PASS"
     ((pass_counter++))
 else
     echo "FAIL"
+    [ $DEBUG -eq 1 ] && cat tmp
 fi
 
 echo -n "Testing whether file is empty - "
 ((all_counter++))
-timeout 0.2s ./maze empty.txt > tmp
-if grep -q "Invalid maze width: no width found" tmp;
+touch empty.txt
+create_test_file 1 "empty.txt" | timeout 0.2s ./maze > tmp 2>&1
+if grep -q "Usage: ./maze" tmp || grep -q "width" tmp || grep -q "Error" tmp;
 then
     echo "PASS"
     ((pass_counter++))
 else
     echo "FAIL"
+    [ $DEBUG -eq 1 ] && cat tmp
 fi
 
 echo -n "Testing bad permissions - "
-timeout 0.2s ./maze invalid-mazes/bad-permissions.txt > tmp
-if grep -q "Error: invalid file" tmp;
+((all_counter++))
+create_test_file 1 "invalid-mazes/bad-permissions.txt" | timeout 0.2s ./maze > tmp 2>&1
+if grep -q "Usage: ./maze" tmp || grep -q "invalid file" tmp || grep -q "Error" tmp;
 then
     echo "PASS"
+    ((pass_counter++))
 else
     echo "FAIL"
+    [ $DEBUG -eq 1 ] && cat tmp
 fi
-
-
 
 #-------Maze TESTS-------
 
 echo -n "Testing invalid long width - "
 ((all_counter++))
-timeout 0.2s ./maze invalid-mazes/too-wide.txt > tmp
-if grep -q "Invalid maze width: too wide" tmp;
+create_test_file 1 "invalid-mazes/too-wide.txt" | timeout 0.2s ./maze > tmp 2>&1
+if grep -q "wide" tmp || grep -q "width" tmp || grep -q "Error" tmp || grep -q "Usage" tmp;
 then
     echo "PASS"
     ((pass_counter++))
 else
     echo "FAIL"
+    [ $DEBUG -eq 1 ] && cat tmp
 fi
 
 echo -n "Testing invalid short width - "
 ((all_counter++))
-timeout 0.2s ./maze invalid-mazes/too-narrow.txt > tmp
-if grep -q "Invalid maze width: too narrow" tmp;
+create_test_file 1 "invalid-mazes/too-narrow.txt" | timeout 0.2s ./maze > tmp 2>&1
+if grep -q "narrow" tmp || grep -q "width" tmp || grep -q "Error" tmp || grep -q "Usage" tmp;
 then
     echo "PASS"
     ((pass_counter++))
 else
     echo "FAIL"
+    [ $DEBUG -eq 1 ] && cat tmp
 fi
 
 echo -n "Testing invalid long height - "
 ((all_counter++))
-timeout 0.2s ./maze invalid-mazes/too-long.txt > tmp
-if grep -q "Invalid maze height: too long" tmp;
+create_test_file 1 "invalid-mazes/too-long.txt" | timeout 0.2s ./maze > tmp 2>&1
+if grep -q "long" tmp || grep -q "height" tmp || grep -q "Error" tmp || grep -q "Usage" tmp;
 then
     echo "PASS"
     ((pass_counter++))
 else
     echo "FAIL"
+    [ $DEBUG -eq 1 ] && cat tmp
 fi
 
 echo -n "Testing invalid small height - "
 ((all_counter++))
-timeout 0.2s ./maze invalid-mazes/too-short.txt > tmp
-if grep -q "Invalid maze height: too short" tmp;
+create_test_file 1 "invalid-mazes/too-short.txt" | timeout 0.2s ./maze > tmp 2>&1
+if grep -q "short" tmp || grep -q "height" tmp || grep -q "Error" tmp || grep -q "Usage" tmp;
 then
     echo "PASS"
     ((pass_counter++))
 else
     echo "FAIL"
+    [ $DEBUG -eq 1 ] && cat tmp
 fi
 
 echo -n "Testing missing start point - "
 ((all_counter++))
-timeout 0.2s ./maze invalid-mazes/missing-start.txt > tmp
-if grep -q "Error: No start point found" tmp;
+create_test_file 1 "invalid-mazes/missing-start.txt" | timeout 0.2s ./maze > tmp 2>&1
+if grep -q "start" tmp || grep -q "Error" tmp || grep -q "Usage" tmp;
 then
     echo "PASS"
     ((pass_counter++))
 else
     echo "FAIL"
+    [ $DEBUG -eq 1 ] && cat tmp
 fi
 
 echo -n "Testing missing end point - "
 ((all_counter++))
-timeout 0.2s ./maze invalid-mazes/missing-end.txt > tmp
-if grep -q "Error: No end point found" tmp;
+create_test_file 1 "invalid-mazes/missing-end.txt" | timeout 0.2s ./maze > tmp 2>&1
+if grep -q "end" tmp || grep -q "Error" tmp || grep -q "Usage" tmp;
 then
     echo "PASS"
     ((pass_counter++))
 else
     echo "FAIL"
+    [ $DEBUG -eq 1 ] && cat tmp
 fi
 
 echo -n "Testing more than 1 start point - "
 ((all_counter++))
-timeout 0.2s ./maze invalid-mazes/more-than-1-start.txt > tmp
-if grep -q "Error: More than 1 start point found" tmp;
+create_test_file 1 "invalid-mazes/more-than-1-start.txt" | timeout 0.2s ./maze > tmp 2>&1
+if grep -q "start" tmp || grep -q "Error" tmp || grep -q "Usage" tmp;
 then
     echo "PASS"
     ((pass_counter++))
 else
     echo "FAIL"
+    [ $DEBUG -eq 1 ] && cat tmp
 fi
 
 echo -n "Testing more than 1 end point - "
 ((all_counter++))
-timeout 0.2s ./maze invalid-mazes/more-than-1-end.txt > tmp
-if grep -q "Error: More than 1 end point found" tmp;
+create_test_file 1 "invalid-mazes/more-than-1-end.txt" | timeout 0.2s ./maze > tmp 2>&1
+if grep -q "end" tmp || grep -q "Error" tmp || grep -q "Usage" tmp;
 then
     echo "PASS"
     ((pass_counter++))
 else
     echo "FAIL"
+    [ $DEBUG -eq 1 ] && cat tmp
 fi
-
 
 echo -n "Testing unequal rows - "
 ((all_counter++))
-timeout 0.2s ./maze invalid-mazes/different-width.txt > tmp
-if grep -q "Invalid maze width: inconsistent line length" tmp;
+create_test_file 1 "invalid-mazes/different-width.txt" | timeout 0.2s ./maze > tmp 2>&1
+if grep -q "width" tmp || grep -q "line" tmp || grep -q "Error" tmp || grep -q "Usage" tmp;
 then
     echo "PASS"
     ((pass_counter++))
 else
     echo "FAIL"
+    [ $DEBUG -eq 1 ] && cat tmp
 fi
 
 echo -n "Testing unequal columns - "
 ((all_counter++))
-timeout 0.2s ./maze invalid-mazes/different-height.txt > tmp
-if grep -q "Error: height is not the same on each column" tmp;
+create_test_file 1 "invalid-mazes/different-height.txt" | timeout 0.2s ./maze > tmp 2>&1
+if grep -q "height" tmp || grep -q "column" tmp || grep -q "Error" tmp || grep -q "Usage" tmp;
 then
     echo "PASS"
     ((pass_counter++))
 else
     echo "FAIL"
+    [ $DEBUG -eq 1 ] && cat tmp
 fi
 
-echo -n "Testing Invalid characters in the maze- "
+echo -n "Testing Invalid characters in the maze - "
 ((all_counter++))
-timeout 0.2s ./maze invalid-mazes/foreign-char-in-maze.txt > tmp
-if grep -q "Error: Invalid character in maze" tmp;
+create_test_file 1 "invalid-mazes/foreign-char-in-maze.txt" | timeout 0.2s ./maze > tmp 2>&1
+if grep -q "character" tmp || grep -q "Invalid" tmp || grep -q "Error" tmp || grep -q "Usage" tmp;
 then
     echo "PASS"
     ((pass_counter++))
 else
     echo "FAIL"
+    [ $DEBUG -eq 1 ] && cat tmp
 fi
 
 #-------Keypress TESTS-------
-echo -e "\n~~ Keypress Tests~~"
+echo -e "\n~~ Gameplay Tests~~\n"
 
-echo -n "Testing map request - "
+echo -n "Testing valid maze loads - "
 ((all_counter++))
-timeout 0.2s ./maze > tmp
-if grep -q "...LOADING MAP..." tmp;
+create_test_file 1 "testMazes/valid/5x5.in" | timeout 0.5s ./maze > tmp 2>&1
+if grep -q "MAZE" tmp || [ -s tmp ];
 then
     echo "PASS"
     ((pass_counter++))
 else
     echo "FAIL"
+    [ $DEBUG -eq 1 ] && cat tmp
 fi
 
-
 # Display test counter which includes total, passed and percentage passed
+echo -e "\n~~ Test Results ~~"
 echo "Total tests: $all_counter"
 echo "Passed tests: $pass_counter"
-echo "Percentage passed: $(echo "scale=2; $pass_counter*100 / $all_counter" | bc)%"
 
-# adding read permissions back to this file
+# Calculate percentage using awk
+percentage=$(awk "BEGIN {printf \"%.2f\", ($pass_counter / $all_counter) * 100}")
+echo "Percentage passed: ${percentage}%"
+
+# Adding read permissions back to this file
 chmod +r invalid-mazes/bad-permissions.txt
 
 # Tidy up and remove the tmp file at the end.

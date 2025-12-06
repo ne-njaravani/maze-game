@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Clean object files
+make clean
+
 # Add all changes to staging
 git add .
 
