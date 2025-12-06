@@ -1,0 +1,16 @@
+# Build artifacts
+*.o
+maze
+
+# Temporary files
+tmp
+*.tmp
+
+# Editor files
+.vscode/
+*.swp
+*.swo
+*~
+
+# CodeQL artifacts
+_codeql_detected_source_root
