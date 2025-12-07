@@ -16,16 +16,9 @@
 #include "PlayerOperations.h"
 #include "GameMessages.h"
 
-/**
- * @brief Print the welcome message
- */
-void welcome_message()
+void maze_game_name()
 {
-    printf("\n\n \\ \\        /  ____|  |       ___|   _ \\    \\  |  ____|      __ __|  _ \\ "
-           "\n  \\ \\  \\   /   __|    |      |      |   |  |\\/ |  __|           |   |   |"
-           "\n   \\ \\  \\ /    |      |      |      |   |  |   |  |             |   |   |"
-           "\n    \\_/\\_/    _____| _____| \\____| \\___/  _|  _| _____|        _|  \\___/ "
-           "\n\n __ __|  |   |  ____|        \\  |     \\    __  /  ____|                  "
+    printf("\n\n __ __|  |   |  ____|        \\  |     \\    __  /  ____|                  "
            "\n    |    |   |  __|         |\\/ |    _ \\      /   __|                    "
            "\n    |    ___ |  |           |   |   ___ \\    /    |                      "
            "\n   _|   _|  _| _____|      _|  _| _/    _\\ ____| _____|                  "
@@ -33,7 +26,15 @@ void welcome_message()
            "\n  |  __    _ \\    |\\/ |  __|    |  |                                     "
            "\n  |   |   ___ \\   |   |  |     _| _|                                     "
            "\n \\____| _/    _\\ _|  _| _____| _) _)                                     \n\n"
-           "\n\nWelcome to the maze game! Your goal is to navigate through the maze and reach the end.\n"
+           );
+}
+
+/**
+ * @brief Print the welcome message
+ */
+void welcome_message()
+{
+    printf("\n\nWelcome to the maze game! Your goal is to navigate through the maze and reach the end.\n"
            "\n\nReady for an adventure? Let's go!\n\n");
 }
 

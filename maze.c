@@ -30,7 +30,7 @@ int get_maze_choice(void)
 
     while (!valid)
     {
-        printf("\n=== MAZE GAME ===\n");
+        maze_game_name();
         printf("Choose your maze option:\n");
         printf("1. Load a premade maze from file\n");
         printf("2. Auto-generate a new maze\n");
@@ -164,13 +164,32 @@ void get_maze_dimensions(int *height, int *width)
 }
 
 /**
+ * @brief Get maze filename from user
+ *
+ * @param filename buffer to store filename
+ * @param size size of buffer
+ */
+void get_maze_filename(char *filename, size_t size)
+{
+    printf("Enter maze file path: ");
+    if (fgets(filename, size, stdin) != NULL)
+    {
+        // Remove newline character if present
+        filename[strcspn(filename, "\n")] = '\0';
+    }
+    else
+    {
+        printf("Input error. Exiting.\n");
+        exit(CODE_ARG_ERROR);
+    }
+}
+
+/**
  * @brief Main function to run the maze game
  *
- * @param argc number of arguments
- * @param argv arguments
  * @return int return 0 if game is successful, or 1, 2, 3 on error
  */
-int main(int argc, char const *argv[])
+int main(void)
 {
     // Setup
     coord *player = malloc(sizeof(coord));
@@ -179,6 +198,7 @@ int main(int argc, char const *argv[])
     int win = 0;
     int maze_choice;
     int maze_height, maze_width;
+    char filename[256];
 
     // Seed random number generator
     srand((unsigned int)time(NULL));
@@ -189,20 +209,11 @@ int main(int argc, char const *argv[])
     if (maze_choice == 1)
     {
         // Load premade maze from file
-        // Check args
-        if (argc != 2)
-        {
-            printf("Usage: ./maze <mazefile path>\n");
-            free(player);
-            free(this_maze);
-            return CODE_ARG_ERROR;
-        }
-        else
-        {
-            // Open and validate mazefile
-            // Check if the file is a valid file
-            file = open_file(argv[1]);
-        }
+        // Get filename from user
+        get_maze_filename(filename, sizeof(filename));
+        
+        // Open and validate mazefile
+        file = open_file(filename);
 
         // Get the maze dimensions
         this_maze->width = get_width(file);
