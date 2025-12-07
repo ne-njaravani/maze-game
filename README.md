@@ -51,21 +51,14 @@ make clean
 
 ### Running the Game
 
-**Option 1: Interactive Script**
-```bash
-./run.sh
-```
-
-**Option 2: Direct Execution with Premade Maze**
-```bash
-./maze <mazefile_path>
-```
-
-**Option 3: Direct Execution with Auto-Generation**
 ```bash
 ./maze
-# Then select option 2 when prompted
 ```
+
+Then follow the interactive prompts to:
+1. **Choose your maze type**: Select between premade (option 1) or auto-generated (option 2)
+2. **If premade**: Enter the maze file path (e.g., `testMazes/valid/maze-valid1.txt`)
+3. **If auto-generated**: Enter desired dimensions (5-100 for both height and width)
 
 ## Controls 🎮
 
